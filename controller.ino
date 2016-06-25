@@ -33,6 +33,12 @@ void loop() {
   //ToDo: detect switch state (on, off); check if typeFlag is 0 or 1.
   //If 1, call runCustomSequence()
   //If 0, call runPresetSequence()
+  if (typeFlag){
+    runCustomSequence();
+  }
+  else{
+    runPresetSequence();
+  }
 }
 
 //-------------------------------
@@ -41,6 +47,7 @@ void loop() {
 void runCustomSequence() {
   //pick an array element from customArray[] at random
   //for each character in that element, run the approproate Action static class function, keep multithreading in mind
+
 }
 
 void runPresetSequence() {
@@ -57,6 +64,4 @@ int jsonParser(String jsonInput) {
   if (customArray == nullptr) {
   // error assigning memory. Take measures.
   }*/
-
-  //this is my first try wohooooo :)))))))
 }
