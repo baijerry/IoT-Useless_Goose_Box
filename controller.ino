@@ -57,4 +57,6 @@ int jsonParser(String jsonInput) {
   if (customArray == nullptr) {
   // error assigning memory. Take measures.
   }*/
+
+  //this is my first try wohooooo :)))))))
 }
