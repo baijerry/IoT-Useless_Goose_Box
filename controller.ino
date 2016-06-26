@@ -1,6 +1,9 @@
 #include "application.h"
 #include "ArduinoJson.h"
+#include "actions.h"
 #include "SparkIntervalTimer.h"
+#include <string.h>
+
 
 //-------------------------------
 // VARIABLES
@@ -8,7 +11,10 @@
 enum TYPE { PRESET, CUSTOM };
 IntervalTimer threadTimer;
 bool typeFlag = 0;
-String* customArray;
+String customArray[6];
+Servo servoLid1, servoLid2, servoArm;
+int pos; // variable to store the servo position
+
 
 //-------------------------------
 // MULTITHREADING INTERVALTIMER
@@ -24,6 +30,12 @@ void threadTimerCB()
 void setup() {
   Serial.begin(9600);
   Particle.function("jsonInput", jsonParser);
+
+  //Attach lid servos to pin 9
+  servoLid1.attach(9);
+  servoLid2.attach(9);
+  //Attach arm servo to pin 10
+  servoArm.attach(10);
 }
 
 //-------------------------------
@@ -48,6 +60,27 @@ void runCustomSequence() {
   //pick an array element from customArray[] at random
   //for each character in that element, run the approproate Action static class function, keep multithreading in mind
 
+  //generate random index number between 0 and size of customArray
+  int rando = random(0, customArray.size();
+  int index = 0;
+  //parse through characters of string in random index
+  for(std::string::iterator it = customArray[rando].begin(); it != customArray[rando].end(); it++, index++){  //REV.IEW PARSING**//
+    //send each character of string to appropriate action function depending on the where the char is in the string
+    switch (index){
+      case 0:
+      actuateLid(*it);
+        break;
+      case 1:
+      actuateLidLED(*it);
+        break;
+      case 2:
+      actuateRedLED(*it);
+        break;
+      case 3:
+      actuateArm(*it);
+        break;
+    }
+  }
 }
 
 void runPresetSequence() {
