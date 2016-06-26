@@ -11,12 +11,12 @@ enum TYPE { PRESET = 0, CUSTOM, INVALID };
 #define MODULES  4
 
 //pin mapping
-#define pin_switch 7
-#define pin_servoLid 9
-#define pin_servoArm 10
-#define pin_lidLight 2
-#define pin_redLight 4
-#define pin_goosesound 8
+#define pin_switch D7
+#define pin_servoLid D0
+#define pin_servoArm D1
+#define pin_lidLight D2
+#define pin_redLight D3
+#define pin_goosesound D4
 
 //Speeds for opening lid
 #define fast 10
