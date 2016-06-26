@@ -114,17 +114,17 @@ void Action::actuateLid (char letter) {
     //NORMAL
     case 'A':
     case 'a':
-      moveServo(servoLid, pin_servoLid, 0, 100, normal);
+      moveServo(servoLid, pin_servoLid, 0, lidMax, normal);
       break;
     //FAST
     case 'B':
     case 'b':
-      moveServo(servoLid, pin_servoLid, 0, 100, fast);
+      moveServo(servoLid, pin_servoLid, 0, lidMax, fast);
       break;
     //SLOW
     case 'C':
     case 'c':
-      moveServo(servoLid, pin_servoLid, 0, 100, slow);
+      moveServo(servoLid, pin_servoLid, 0, lidMax, slow);
       break;
     //SHAKE
     case 'D':
@@ -143,24 +143,25 @@ void Action::actuateLid (char letter) {
 void Action::actuateArm (char letter) {
   switch (letter)
   {
+    //NORMAL
     case 'A':
     case 'a':
-
+      moveServo(servoArm, pin_servoArm, 0, armMax, normal);
       break;
-
+    //FAST
     case 'B':
     case 'b':
-
+      moveServo(servoArm, pin_servoArm, 0, armMax, fast);
       break;
-
+      //SLOW
     case 'C':
     case 'c':
-
+      moveServo(servoArm, pin_servoArm, 0, armMax, slow);
       break;
-
+    //SHAKE
     case 'D':
     case 'd':
-
+      shakeServo(servoArm, pin_servoArm);
       break;
 
     default:

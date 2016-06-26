@@ -18,5 +18,8 @@ enum TYPE { PRESET = 0, CUSTOM, INVALID };
 #define fast 10
 #define slow 1
 #define normal 2
+//Max angle for servo motors
+#define lidMax 100
+#define armMax 119
 
 #endif
