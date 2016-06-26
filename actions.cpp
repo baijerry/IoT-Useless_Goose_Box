@@ -32,18 +32,22 @@ void Action::shakeServo (Servo thisServo) {
   }
 }
 
+void Action::actuateLidLED (char letter) {
+  //ToDo: Lid LED functions (on, delayed on, off, flicker)
+}
+
+void Action::actuateRedLED (char letter) {
+  //ToDo: Goose Red LED functions (on, delayed on, off, flicker)
+}
+
 void Action::actuateLid (char letter) {
 
 }
 
-void Action::actuateLidLED (char letter) {
-
-}
-
 void Action::actuateArm (char letter) {
-
+  //ToDo: Arm Movement (normal, fast, slow, shake)
 }
 
-void Action::actuateRedLED (char letter) {
+void Action::actuateGooseSound(char letter) {
 
 }

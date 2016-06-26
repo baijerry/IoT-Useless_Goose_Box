@@ -1,31 +1,60 @@
 #ifndef actions_h
 #define actions_h
 
-
 /* Action Class
- * Holds all the possible actions that can be performed by the box
+ Holds all the possible actions that can be performed by the box
+
+actuateLid
+ A= on
+ B= delayed on
+ C= off
+ D= flicker
+
+actuateRedLED
+ A= on
+ B= delayed on
+ C= off
+ D= flicker
+
+actuateLid
+ A= normal
+ B= fast
+ C= slow
+ D= shake
+
+actuateArm
+ A= normal
+ B= fast
+ C= slow
+ D= shake
+
+actuateGooseSound
+ A= On
+ B= Off
+
  */
 
 class Action {
   private:
-
+    //no  functions, I need all of it for preset stuff
   public:
     //Define static action functions here
 
+    ///HELPER FUNCTIONS
     //Move: servo moves from start angle to end angle
     static void moveServo (Servo thisServo, int startAngle, int endAngle, int angSpeed);
     //Shake: Change angle direction very quickly for lid open
     static void shakeServo(Servo thisServo);
     //Lid Movement functions (normal, fast, slow, shake)
-    static void actuateLid(char letter);
-    //ToDo: Lid LED functions (on, delayed on, off, flicker)
-    static void actuateLidLED(char letter);
-    //ToDo: Arm Movement (normal, fast, slow, shake)
-    static void actuateArm(char letter);
-    //ToDo: Goose Red LED functions (on, delayed on, off, flicker)
-    static void actuateRedLED(char letter);
-    //ToDo: Define preset functions
 
+    //5 MAIN ACTION FUNCTIONS
+    static void actuateLid(char letter);
+    static void actuateLidLED(char letter);
+    static void actuateArm(char letter);
+    static void actuateRedLED(char letter);
+    static void actuateGooseSound (char letter);
+
+    //PRESET FUNCTIONS
 };
 
 #endif

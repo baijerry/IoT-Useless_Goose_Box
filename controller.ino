@@ -8,15 +8,24 @@
 //-------------------------------
 // VARIABLES
 //-------------------------------
-enum TYPE { PRESET, CUSTOM, INVALID };
-IntervalTimer threadTimer;
+enum TYPE { PRESET = 0, CUSTOM, INVALID };
 TYPE typeFlag;
+IntervalTimer threadTimer;
+
+//pin mapping
+int pin_switch = 7;
+int pin_servoLid1 = 9;
+int pin_servoArm = 10;
+int pin_lidLight = 2;
+int pin_redLight = 4;
+
+//arrays
 String customArray[6];
-int customArrayNumItems;
+int customArrayNumItems = 0;
+int presetArrayNumItems = 0;
+
 Servo servoLid1, servoLid2, servoArm;
 int pos; // variable to store the servo position
-
-
 
 
 //-------------------------------
@@ -34,26 +43,31 @@ void setup() {
   Particle.function("jsonParser", jsonParser);
   Serial.begin(9600);
 
-  //Attach lid servo to pin 9
-  servoLid1.attach(9);
-  //Attach arm servo to pin 10
-  servoArm.attach(10);
+  //pin init
+  pinMode(pin_switch, INPUT);
+  pinMode(pin_lidLight, OUTPUT);
+  pinMode(pin_redLight, OUTPUT);
+
+  //Attach lid servo
+  servoLid1.attach(pin_servoLid1);
+  //Attach arm servo
+  servoArm.attach(pin_servoArm);
 }
 
 //-------------------------------
 // MAIN LOOP
 //-------------------------------
 void loop() {
-  //ToDo: detect switch state (on, off); check if typeFlag is 0 or 1.
-  //If 1, call runCustomSequence()
-  //If 0, call runPresetSequence()
-
-  if (typeFlag){
-    runCustomSequence();
-  }
-  else
+  if (digitalRead(pin_switch) == HIGH)
   {
-    runPresetSequence();
+    Serial.println ("switch is on");
+    if (typeFlag == CUSTOM ){
+      runCustomSequence();
+    }
+    else //preset or invalid
+    {
+      runPresetSequence();
+    }
   }
 }
 
@@ -70,22 +84,25 @@ void runCustomSequence() {
   const char * charArray = customArray[rando].c_str(); //convert string in customArray to an array of chars
   char letter;
 
+  Serial.print("Running Custom Sequence: ");
+  Serial.println(rando);
+
   //parse through characters of string in random index
   for(int i = 0; i < MODULES; i++){  //REV.IEW PARSING**//
     //send each character of string to appropriate action function depending on the where the char is in the string
     letter = charArray[i];
     switch (i){
       case 0:
-      Action::actuateLid(letter);
+        Action::actuateLid(letter);
         break;
       case 1:
-      Action::actuateLidLED(letter);
+        Action::actuateLidLED(letter);
         break;
       case 2:
-      Action::actuateRedLED(letter);
+        Action::actuateRedLED(letter);
         break;
       case 3:
-      Action::actuateArm(letter);
+        Action::actuateArm(letter);
         break;
     }
   }
@@ -95,8 +112,9 @@ void runPresetSequence() {
   //randomize a number between 0 and number of preset functions (5)
   //based on randomized number, run appropriate Action static class function (pertaining to presets)
 
-
-  int rando = random(0, customArrayNumItems); //random number generator between 0 and size of customArray
+  int rando = random(0, presetArrayNumItems); //random number generator between 0 and size of customArray
+  Serial.print("Running Preset Sequence: ");
+  Serial.println(rando);
 
   switch (rando)
   {
@@ -146,11 +164,12 @@ int jsonParser(String jsonInput)
     JsonArray& dataArray = root["data"].asArray();
     customArrayNumItems = dataArray.size();
 
-    for (int i = 0; i < dataArray.size(); i++)
+    for (int i = 0; i < customArrayNumItems; i++)
     {
       customArray[i] = dataArray[i];
 
       //for testing purposes
+      Serial.println("Successfully stored rows from cloud input:");
       Serial.println(customArray[i]);
     }
 
