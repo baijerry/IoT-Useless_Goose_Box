@@ -12,10 +12,10 @@ class Action {
   public:
     //Define static action functions here
 
-    //Move servo motor from start angle to end angle
+    //Move: servo moves from start angle to end angle
     static void moveServo (Servo thisServo, int startAngle, int endAngle, int angSpeed);
     //Shake: Change angle direction very quickly for lid open
-    static void shakeServo();
+    static void shakeServo(Servo thisServo);
     //Lid Movement functions (normal, fast, slow, shake)
     static void actuateLid(char letter);
     //ToDo: Lid LED functions (on, delayed on, off, flicker)

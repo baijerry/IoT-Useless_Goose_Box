@@ -67,7 +67,7 @@ void runCustomSequence() {
   //generate random index number between 0 and size of customArray
   int rando = random(0, customArrayNumItems);
   int index = 0;
-  const char * charArray = customArray[rando].c_str();
+  const char * charArray = customArray[rando].c_str(); //convert string in customArray to an array of chars
   char letter;
 
   //parse through characters of string in random index
@@ -95,7 +95,8 @@ void runPresetSequence() {
   //randomize a number between 0 and number of preset functions (5)
   //based on randomized number, run appropriate Action static class function (pertaining to presets)
 
-  int rando = random(0, customArrayNumItems);
+
+  int rando = random(0, customArrayNumItems); //random number generator between 0 and size of customArray
 
   switch (rando)
   {
