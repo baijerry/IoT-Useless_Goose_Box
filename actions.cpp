@@ -1,7 +1,9 @@
 #include "actions.h"
 
+//Initialize servo motors
 Servo servoLid, servoArm;
 
+//-------SERVO MOTOR MOTIONS
 //Move: servo moves from start angle to end angle
 void Action::moveServo (Servo thisServo, int servopin, int startAngle, int endAngle, int angSpeed) {
   bool angleIncr = false; // boolean to determine if the angle needs to increase or decrease to get to endAngle
@@ -37,8 +39,8 @@ void Action::shakeServo (Servo thisServo, int servopin) {
   }
 }
 
-//actuateLidLED: A= on B= delayed on C= off D= flicker
-
+//-------5 MAIN FUNCTIONS
+//A= on B= delayed on C= off D= flicker
 void Action::actuateLidLED (char letter) {
   switch (letter)
   {
@@ -81,6 +83,7 @@ void Action::actuateLidLED (char letter) {
   reset();
 }
 
+//A= on B= delayed on C= off D= flicker
 void Action::actuateRedLED (char letter) {
   switch (letter)
   {
@@ -158,7 +161,7 @@ void Action::actuateLid (char letter) {
 
   //wrapup
 }
-
+//actuateLid:  A= normal B= fast C= slow D= shake
 void Action::actuateArm (char letter) {
   switch (letter)
   {
@@ -190,7 +193,7 @@ void Action::actuateArm (char letter) {
 
   //wrapup
 }
-
+//actuateGooseSound: A: sound B: NO sound
 void Action::actuateGooseSound(char letter) {
   switch (letter)
   {
@@ -212,7 +215,7 @@ void Action::actuateGooseSound(char letter) {
   //wrapup
 }
 
-
+//------HELPER FUNCTIONS
 //Close box lid
 void Action::closeLid(){
   servoArm.attach(pin_servoLid);
