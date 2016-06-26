@@ -1,4 +1,5 @@
 #include "actions.h"
+
 Servo servoLid, servoArm;
 
 //Move: servo moves from start angle to end angle
@@ -36,10 +37,6 @@ void Action::shakeServo (Servo thisServo, int servopin) {
   }
 }
 
-//Close box lid
-void Action::closeLid(){
-  servoLid.write(0);  //set servo angle to 0/close lid
-}
 
 void Action::actuateLidLED (char letter) {
   switch (letter)
@@ -47,19 +44,19 @@ void Action::actuateLidLED (char letter) {
     case 'A':
     case 'a':
       //on
-      digitalWrite(pin_lidLight, HIGH);
+      digitalWrite(pin_lidLight, LOW);
       break;
 
     case 'B':
     case 'b':
       //delayed on
       delay(delayed_response_timems);
-      digitalWrite(pin_lidLight, HIGH);
+      digitalWrite(pin_lidLight, LOW);
       break;
 
     case 'C':
     case 'c':
-      digitalWrite(pin_lidLight, LOW);
+      digitalWrite(pin_lidLight, HIGH);
       break;
 
     case 'D':
@@ -68,7 +65,12 @@ void Action::actuateLidLED (char letter) {
       {
         digitalWrite(pin_lidLight, LOW);
         delay(500);
-        digitalWrite()
+        digitalWrite(pin_lidLight, HIGH);
+        delay(300);
+        digitalWrite(pin_lidLight, LOW);
+        delay(100);
+        digitalWrite(pin_lidLight, HIGH);
+        delay(500);
       }
       break;
 
@@ -77,7 +79,7 @@ void Action::actuateLidLED (char letter) {
       break;
   }
 
-  //wrapup
+  reset();
 
 }
 
@@ -86,22 +88,35 @@ void Action::actuateRedLED (char letter) {
   {
     case 'A':
     case 'a':
-
+      //on
+      digitalWrite(pin_redLight, LOW);
       break;
 
     case 'B':
     case 'b':
-
+      //delayed on
+      delay(delayed_response_timems);
+      digitalWrite(pin_redLight, LOW);
       break;
 
     case 'C':
     case 'c':
-
+      digitalWrite(pin_redLight, LOW);
       break;
 
     case 'D':
     case 'd':
-
+      for (int i = 0; i < 5; i++)
+      {
+        digitalWrite(pin_redLight, LOW);
+        delay(500);
+        digitalWrite(pin_redLight, HIGH);
+        delay(300);
+        digitalWrite(pin_redLight, LOW);
+        delay(100);
+        digitalWrite(pin_redLight, HIGH);
+        delay(500);
+      }
       break;
 
     default:
@@ -109,7 +124,7 @@ void Action::actuateRedLED (char letter) {
       break;
   }
 
-  //wrapup
+  reset();
 
 }
 
@@ -199,6 +214,21 @@ void Action::actuateGooseSound(char letter) {
   //wrapup
 }
 
-void Action::reset(){
 
+//Close box lid
+void Action::closeLid(){
+  servoArm.attach(pin_servoLid);
+  servoLid.write(0);  //set servo angle to 0/close lid
+}
+
+//reset lights arm and lid
+void Action::reset(){
+  digitalWrite(pin_lidLight, HIGH);
+  digitalWrite(pin_redLight, HIGH);
+  digitalWrite(pin_goosesound, HIGH);
+
+  servoArm.attach(pin_servoArm);
+  servoArm.write(armMax);
+
+  closeLid();
 }

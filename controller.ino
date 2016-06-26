@@ -40,10 +40,10 @@ void setup() {
   pinMode(pin_lidLight, OUTPUT);
   pinMode(pin_redLight, OUTPUT);
 
-  //Attach lid servo
-  //servoLid.attach(pin_servoLid);
-  //Attach arm servo
-  //servoArm.attach(pin_servoArm);
+  //relays are backwards, high means off
+  digitalWrite(pin_lidLight, HIGH);
+  digitalWrite(pin_redLight, HIGH);
+  digitalWrite(pin_goosesound, HIGH);
 }
 
 //-------------------------------
