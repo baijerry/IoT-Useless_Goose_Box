@@ -1,7 +1,9 @@
 #include "actions.h"
 
+//Initialize servo motors
 Servo servoLid, servoArm;
 
+//-------SERVO MOTOR MOTIONS
 //Move: servo moves from start angle to end angle
 void Action::moveServo (Servo thisServo, int servopin, int startAngle, int endAngle, int angSpeed) {
   bool angleIncr = false; // boolean to determine if the angle needs to increase or decrease to get to endAngle
@@ -15,7 +17,7 @@ void Action::moveServo (Servo thisServo, int servopin, int startAngle, int endAn
   //Increasing servo angle
   if(angleIncr){
     for (pos = startAngle; pos <= endAngle; pos += angSpeed) { // goes from start angle to end angle in steps of angular speed variable
-      thisServo.write(pos);              // tell servo to go to position in variable 'pos'
+      thisServo.write(pos);           // tell servo to go to position in variable 'pos'
       delay(15);                      // waits 15ms for the servo to reach the position
     }
   }
@@ -37,28 +39,28 @@ void Action::shakeServo (Servo thisServo, int servopin) {
   }
 }
 
-
+//-------5 MAIN FUNCTIONS
+//A= on B= delayed on C= off D= flicker
 void Action::actuateLidLED (char letter) {
   switch (letter)
   {
+    //OFF
     case 'A':
     case 'a':
-      //on
       digitalWrite(pin_lidLight, LOW);
       break;
-
+    //DELAYED ON
     case 'B':
     case 'b':
-      //delayed on
       delay(delayed_response_timems);
       digitalWrite(pin_lidLight, LOW);
       break;
-
+    //ON
     case 'C':
     case 'c':
       digitalWrite(pin_lidLight, HIGH);
       break;
-
+    //FLICKER
     case 'D':
     case 'd':
       for (int i = 0; i < 5; i++)
@@ -78,11 +80,10 @@ void Action::actuateLidLED (char letter) {
       //do nothing
       break;
   }
-
   reset();
-
 }
 
+//A= on B= delayed on C= off D= flicker
 void Action::actuateRedLED (char letter) {
   switch (letter)
   {
@@ -160,7 +161,7 @@ void Action::actuateLid (char letter) {
 
   //wrapup
 }
-
+//actuateLid:  A= normal B= fast C= slow D= shake
 void Action::actuateArm (char letter) {
   switch (letter)
   {
@@ -192,7 +193,7 @@ void Action::actuateArm (char letter) {
 
   //wrapup
 }
-
+//actuateGooseSound: A: sound B: NO sound
 void Action::actuateGooseSound(char letter) {
   switch (letter)
   {
@@ -214,7 +215,7 @@ void Action::actuateGooseSound(char letter) {
   //wrapup
 }
 
-
+//------HELPER FUNCTIONS
 //Close box lid
 void Action::closeLid(){
   servoArm.attach(pin_servoLid);

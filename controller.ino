@@ -17,7 +17,6 @@ IntervalTimer threadTimer;
 String customArray[6];
 int customArrayNumItems = 0;
 int presetArrayNumItems = 0;
-
 int pos; // variable to store the servo position
 
 //-------------------------------
