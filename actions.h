@@ -45,12 +45,16 @@ class Action {
 
   ///HELPER FUNCTIONS
     //Move: servo moves from start angle to end angle
-    static void moveServo (Servo thisServo, int startAngle, int endAngle, int angSpeed);
+    static void moveServo (Servo thisServo, int servopin, int startAngle, int endAngle, int angSpeed);
     //Shake: Change angle direction very quickly for lid open
-    static void shakeServo(Servo thisServo);
+    static void shakeServo(Servo thisServo, int servopin);
     //Lid Movement functions (normal, fast, slow, shake)
     static void reset();
+    //close box lid from any position
+    static void closeLid();
+
     //turns off lights, makes sure arm is closed, closes lid
+
 
   //5 MAIN ACTION FUNCTIONS
     static void actuateLid(char letter);

@@ -18,7 +18,6 @@ String customArray[6];
 int customArrayNumItems = 0;
 int presetArrayNumItems = 0;
 
-Servo servoLid1, servoLid2, servoArm;
 int pos; // variable to store the servo position
 
 //-------------------------------
@@ -42,9 +41,9 @@ void setup() {
   pinMode(pin_redLight, OUTPUT);
 
   //Attach lid servo
-  servoLid1.attach(pin_servoLid1);
+  //servoLid.attach(pin_servoLid);
   //Attach arm servo
-  servoArm.attach(pin_servoArm);
+  //servoArm.attach(pin_servoArm);
 }
 
 //-------------------------------
