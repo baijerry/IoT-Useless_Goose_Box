@@ -1,4 +1,3 @@
-#include "application.h"
 #include "actions.h"
 
 //Move: servo moves from start angle to end angle
@@ -33,21 +32,154 @@ void Action::shakeServo (Servo thisServo) {
 }
 
 void Action::actuateLidLED (char letter) {
-  //ToDo: Lid LED functions (on, delayed on, off, flicker)
+  switch (letter)
+  {
+    case 'A':
+    case 'a':
+      //on
+      digitalWrite(pin_lidLight, HIGH);
+      break;
+
+    case 'B':
+    case 'b':
+      //delayed on
+
+      break;
+
+    case 'C':
+    case 'c':
+
+      break;
+
+    case 'D':
+    case 'd':
+
+      break;
+
+    default:
+      //do nothing
+      break;
+  }
+
+  //wrapup
+
 }
 
 void Action::actuateRedLED (char letter) {
-  //ToDo: Goose Red LED functions (on, delayed on, off, flicker)
+  switch (letter)
+  {
+    case 'A':
+    case 'a':
+
+      break;
+
+    case 'B':
+    case 'b':
+
+      break;
+
+    case 'C':
+    case 'c':
+
+      break;
+
+    case 'D':
+    case 'd':
+
+      break;
+
+    default:
+      //do nothing
+      break;
+  }
+
+  //wrapup
+
 }
 
 void Action::actuateLid (char letter) {
+  switch (letter)
+  {
+    case 'A':
+    case 'a':
 
+      break;
+
+    case 'B':
+    case 'b':
+
+      break;
+
+    case 'C':
+    case 'c':
+
+      break;
+
+    case 'D':
+    case 'd':
+
+      break;
+
+    default:
+      //do nothing
+      break;
+  }
+
+  //wrapup
 }
 
 void Action::actuateArm (char letter) {
-  //ToDo: Arm Movement (normal, fast, slow, shake)
+  switch (letter)
+  {
+    case 'A':
+    case 'a':
+
+      break;
+
+    case 'B':
+    case 'b':
+
+      break;
+
+    case 'C':
+    case 'c':
+
+      break;
+
+    case 'D':
+    case 'd':
+
+      break;
+
+    default:
+      //do nothing
+      break;
+  }
+
+  //wrapup
 }
 
 void Action::actuateGooseSound(char letter) {
+  switch (letter)
+  {
+    case 'A':
+    case 'a':
+
+      break;
+
+    case 'B':
+    case 'b':
+
+      break;
+
+    default:
+      //do nothing
+      break;
+  }
+
+  //wrapup
+}
+
+void Action::reset(){
 
 }

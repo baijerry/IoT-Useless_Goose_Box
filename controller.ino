@@ -1,23 +1,17 @@
 #include "application.h"
-#include "ArduinoJson.h"
+#include "config.h"
+
 #include "actions.h"
+
+#include "ArduinoJson.h"
 #include "SparkIntervalTimer.h"
 #include <string.h>
 
-# define MODULES  4
 //-------------------------------
 // VARIABLES
 //-------------------------------
-enum TYPE { PRESET = 0, CUSTOM, INVALID };
 TYPE typeFlag;
 IntervalTimer threadTimer;
-
-//pin mapping
-int pin_switch = 7;
-int pin_servoLid1 = 9;
-int pin_servoArm = 10;
-int pin_lidLight = 2;
-int pin_redLight = 4;
 
 //arrays
 String customArray[6];
@@ -26,7 +20,6 @@ int presetArrayNumItems = 0;
 
 Servo servoLid1, servoLid2, servoArm;
 int pos; // variable to store the servo position
-
 
 //-------------------------------
 // MULTITHREADING INTERVALTIMER
