@@ -1,4 +1,5 @@
 #include "actions.h"
+Servo servoLid, servoArm;
 
 //Move: servo moves from start angle to end angle
 void Action::moveServo (Servo thisServo, int servopin, int startAngle, int endAngle, int angSpeed) {
@@ -26,12 +27,18 @@ void Action::moveServo (Servo thisServo, int servopin, int startAngle, int endAn
   }
 }
 
-//Shake: Change angle direction very quickly for lid open
+//Shake: move to closed position and shake lid
 void Action::shakeServo (Servo thisServo, int servopin) {
-  for (int i = 0; i < 10; i++) {//oscillate upen and down for 10 cycles
+  closeLid();//close lid before shaking
+  for (int i = 0; i < 10; i++) {//oscillate up and down for 10 cycles
     moveServo(thisServo, servopin, 0, 15, 15); //open quickly (to 10 degrees)
     moveServo(thisServo, servopin, 15, 0, 15); //close quickly (to 10 degrees)
   }
+}
+
+//Close box lid
+void Action::closeLid(){
+  servoLid.write(0);  //set servo angle to 0/close lid
 }
 
 void Action::actuateLidLED (char letter) {
@@ -100,27 +107,29 @@ void Action::actuateRedLED (char letter) {
 
 }
 
+//actuateLid:  A= normal B= fast C= slow D= shake
 void Action::actuateLid (char letter) {
   switch (letter)
   {
+    //NORMAL
     case 'A':
     case 'a':
-
+      moveServo(servoLid, pin_servoLid, 0, 100, normal);
       break;
-
+    //FAST
     case 'B':
     case 'b':
-
+      moveServo(servoLid, pin_servoLid, 0, 100, fast);
       break;
-
+    //SLOW
     case 'C':
     case 'c':
-
+      moveServo(servoLid, pin_servoLid, 0, 100, slow);
       break;
-
+    //SHAKE
     case 'D':
     case 'd':
-
+      shakeServo(servoLid, pin_servoLid);
       break;
 
     default:
