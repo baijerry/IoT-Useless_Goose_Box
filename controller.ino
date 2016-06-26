@@ -34,6 +34,14 @@ void loop() {
   //ToDo: detect switch state (on, off); check if typeFlag is 0 or 1.
   //If 1, call runCustomSequence()
   //If 0, call runPresetSequence()
+
+  if (typeFlag){
+    runCustomSequence();
+  }
+  else
+  {
+    runPresetSequence();
+  }
 }
 
 //-------------------------------
