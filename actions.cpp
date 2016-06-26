@@ -28,9 +28,9 @@ void Action::moveServo (Servo thisServo, int servopin, int startAngle, int endAn
 
 //Shake: Change angle direction very quickly for lid open
 void Action::shakeServo (Servo thisServo, int servopin) {
-  for (int i = 0; i < 4; i++) {//oscillate upen and down for 4 cycles
-    moveServo(thisServo, servopin, 0, 10, 10); //open quickly (to 10 degrees)
-    moveServo(thisServo, servopin, 10, 0, 10); //close quickly (to 10 degrees)
+  for (int i = 0; i < 10; i++) {//oscillate upen and down for 10 cycles
+    moveServo(thisServo, servopin, 0, 15, 15); //open quickly (to 10 degrees)
+    moveServo(thisServo, servopin, 15, 0, 15); //close quickly (to 10 degrees)
   }
 }
 
