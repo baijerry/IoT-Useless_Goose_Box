@@ -3,6 +3,9 @@
 
 #include "application.h"
 
+//time related
+#define delayed_response_timems 3*1000
+
 //State/Flags
 enum TYPE { PRESET = 0, CUSTOM, INVALID };
 #define MODULES  4
@@ -14,6 +17,7 @@ enum TYPE { PRESET = 0, CUSTOM, INVALID };
 #define pin_servoArm 10
 #define pin_lidLight 2
 #define pin_redLight 4
+#define pin_goosesound 8
 //Speeds for opening lid
 #define fast 10
 #define slow 1

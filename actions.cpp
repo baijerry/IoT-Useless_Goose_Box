@@ -1,4 +1,5 @@
 #include "actions.h"
+
 Servo servoLid, servoArm;
 
 //Move: servo moves from start angle to end angle
@@ -36,46 +37,48 @@ void Action::shakeServo (Servo thisServo, int servopin) {
   }
 }
 
-//Close box lid
-void Action::closeLid(){
-  servoLid.write(0);  //set servo angle to 0/close lid
-}
 //actuateLidLED: A= on B= delayed on C= off D= flicker
+
 void Action::actuateLidLED (char letter) {
   switch (letter)
   {
-    //ON
+    //OFF
     case 'A':
     case 'a':
-      digitalWrite(pin_lidLight, HIGH);
+      digitalWrite(pin_lidLight, LOW);
       break;
     //DELAYED ON
     case 'B':
     case 'b':
-      delay(3000);//delay 3 sec then turn on
-      digitalWrite(pin_lidLight, HIGH);
+      delay(delayed_response_timems);
+      digitalWrite(pin_lidLight, LOW);
       break;
-    //OFF
+    //ON
     case 'C':
     case 'c':
-      //do nothing
+      digitalWrite(pin_lidLight, HIGH);
       break;
     //FLICKER
     case 'D':
     case 'd':
-    for (int i = 0; i < 20; i++){
-      digitalWrite(pin_lidLight, HIGH);   // turn the LED on (HIGH is the voltage level)
-      delay(100);              // wait for a second
-      digitalWrite(pin_lidLight, LOW);    // turn the LED off by making the voltage LOW
-      delay(100);
-    }
+      for (int i = 0; i < 5; i++)
+      {
+        digitalWrite(pin_lidLight, LOW);
+        delay(500);
+        digitalWrite(pin_lidLight, HIGH);
+        delay(300);
+        digitalWrite(pin_lidLight, LOW);
+        delay(100);
+        digitalWrite(pin_lidLight, HIGH);
+        delay(500);
+      }
       break;
 
     default:
       //do nothing
       break;
   }
-
+  reset();
 }
 
 void Action::actuateRedLED (char letter) {
@@ -83,22 +86,35 @@ void Action::actuateRedLED (char letter) {
   {
     case 'A':
     case 'a':
-
+      //on
+      digitalWrite(pin_redLight, LOW);
       break;
 
     case 'B':
     case 'b':
-
+      //delayed on
+      delay(delayed_response_timems);
+      digitalWrite(pin_redLight, LOW);
       break;
 
     case 'C':
     case 'c':
-
+      digitalWrite(pin_redLight, LOW);
       break;
 
     case 'D':
     case 'd':
-
+      for (int i = 0; i < 5; i++)
+      {
+        digitalWrite(pin_redLight, LOW);
+        delay(500);
+        digitalWrite(pin_redLight, HIGH);
+        delay(300);
+        digitalWrite(pin_redLight, LOW);
+        delay(100);
+        digitalWrite(pin_redLight, HIGH);
+        delay(500);
+      }
       break;
 
     default:
@@ -106,7 +122,7 @@ void Action::actuateRedLED (char letter) {
       break;
   }
 
-  //wrapup
+  reset();
 
 }
 
@@ -196,6 +212,21 @@ void Action::actuateGooseSound(char letter) {
   //wrapup
 }
 
-void Action::reset(){
 
+//Close box lid
+void Action::closeLid(){
+  servoArm.attach(pin_servoLid);
+  servoLid.write(0);  //set servo angle to 0/close lid
+}
+
+//reset lights arm and lid
+void Action::reset(){
+  digitalWrite(pin_lidLight, HIGH);
+  digitalWrite(pin_redLight, HIGH);
+  digitalWrite(pin_goosesound, HIGH);
+
+  servoArm.attach(pin_servoArm);
+  servoArm.write(armMax);
+
+  closeLid();
 }
