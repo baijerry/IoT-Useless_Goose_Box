@@ -43,17 +43,23 @@ void Action::actuateLidLED (char letter) {
     case 'B':
     case 'b':
       //delayed on
-
+      delay(delayed_response_timems);
+      digitalWrite(pin_lidLight, HIGH);
       break;
 
     case 'C':
     case 'c':
-
+      digitalWrite(pin_lidLight, LOW);
       break;
 
     case 'D':
     case 'd':
-
+      for (int i = 0; i < 5; i++)
+      {
+        digitalWrite(pin_lidLight, LOW);
+        delay(500);
+        digitalWrite()
+      }
       break;
 
     default:

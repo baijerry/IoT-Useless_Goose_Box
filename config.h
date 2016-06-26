@@ -3,6 +3,9 @@
 
 #include "application.h"
 
+//time related
+#define delayed_response_timems 3*1000;
+
 //State/Flags
 enum TYPE { PRESET = 0, CUSTOM, INVALID };
 #define MODULES  4
