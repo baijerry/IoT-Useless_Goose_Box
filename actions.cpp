@@ -14,7 +14,7 @@ void Action::moveServo (Servo thisServo, int servopin, int startAngle, int endAn
   //Increasing servo angle
   if(angleIncr){
     for (pos = startAngle; pos <= endAngle; pos += angSpeed) { // goes from start angle to end angle in steps of angular speed variable
-      thisServo.write(pos);              // tell servo to go to position in variable 'pos'
+      thisServo.write(pos);           // tell servo to go to position in variable 'pos'
       delay(15);                      // waits 15ms for the servo to reach the position
     }
   }
@@ -40,38 +40,41 @@ void Action::shakeServo (Servo thisServo, int servopin) {
 void Action::closeLid(){
   servoLid.write(0);  //set servo angle to 0/close lid
 }
-
+//actuateLidLED: A= on B= delayed on C= off D= flicker
 void Action::actuateLidLED (char letter) {
   switch (letter)
   {
+    //ON
     case 'A':
     case 'a':
-      //on
       digitalWrite(pin_lidLight, HIGH);
       break;
-
+    //DELAYED ON
     case 'B':
     case 'b':
-      //delayed on
-
+      delay(3000);//delay 3 sec then turn on
+      digitalWrite(pin_lidLight, HIGH);
       break;
-
+    //OFF
     case 'C':
     case 'c':
-
+      //do nothing
       break;
-
+    //FLICKER
     case 'D':
     case 'd':
-
+    for (int i = 0; i < 20; i++){
+      digitalWrite(pin_lidLight, HIGH);   // turn the LED on (HIGH is the voltage level)
+      delay(100);              // wait for a second
+      digitalWrite(pin_lidLight, LOW);    // turn the LED off by making the voltage LOW
+      delay(100);
+    }
       break;
 
     default:
       //do nothing
       break;
   }
-
-  //wrapup
 
 }
 
