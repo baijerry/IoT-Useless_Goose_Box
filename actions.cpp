@@ -2,10 +2,13 @@
 
 //Move: servo moves from start angle to end angle
 void Action::moveServo (Servo thisServo, int servopin, int startAngle, int endAngle, int angSpeed) {
-  bool angleIncr; // boolean to determine if the angle needs to increase or decrease to get to endAngle
+  bool angleIncr = false; // boolean to determine if the angle needs to increase or decrease to get to endAngle
   int pos;
   thisServo.attach(servopin);
   if(startAngle < endAngle) angleIncr = true; //if start angle is smaller than end angle then it must increase
+
+  //set servo to start angle
+  thisServo.write(startAngle);
 
   //Increasing servo angle
   if(angleIncr){
@@ -16,12 +19,11 @@ void Action::moveServo (Servo thisServo, int servopin, int startAngle, int endAn
   }
   //Decreasing servo Angle
   else{
-    for(pos = endAngle; pos >= startAngle; pos -= angSpeed) { // goes from end angle to start angle in steps of angular speed variable
+    for(pos = startAngle; pos >= endAngle; pos -= angSpeed) { // goes from end angle to start angle in steps of angular speed variable
       thisServo.write(pos);              // tell servo to go to position in variable 'pos'
       delay(15);                       // waits 15ms for the servo to reach the position
     }
   }
-  delay(15); //delay before next action
 }
 
 //Shake: Change angle direction very quickly for lid open
