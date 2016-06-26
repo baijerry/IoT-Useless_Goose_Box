@@ -1,18 +1,21 @@
 #include "actions.h"
 
-//Initialize servo motors
-Servo servoLid, servoArm;
+Action::Action(){
+  servoLid.attach(pin_servoLid);
+  servoArm.attach(pin_servoArm);
+
+  servoArm.write(119);
+  delay(500);
+  servoLid.write(0);
+  delay(500);
+}
 
 //-------SERVO MOTOR MOTIONS
 //Move: servo moves from start angle to end angle
-void Action::moveServo (Servo thisServo, int servopin, int startAngle, int endAngle, int angSpeed) {
+void Action::moveServo (Servo thisServo, int startAngle, int endAngle, int angSpeed) {
   bool angleIncr = false; // boolean to determine if the angle needs to increase or decrease to get to endAngle
-  int pos;
-  thisServo.attach(servopin);
+  int pos = 0;
   if(startAngle < endAngle) angleIncr = true; //if start angle is smaller than end angle then it must increase
-
-  //set servo to start angle
-  thisServo.write(startAngle);
 
   //Increasing servo angle
   if(angleIncr){
@@ -31,11 +34,11 @@ void Action::moveServo (Servo thisServo, int servopin, int startAngle, int endAn
 }
 
 //Shake: move to closed position and shake lid
-void Action::shakeServo (Servo thisServo, int servopin) {
+void Action::shakeServo (Servo thisServo) {
   closeLid();//close lid before shaking
   for (int i = 0; i < 10; i++) {//oscillate up and down for 10 cycles
-    moveServo(thisServo, servopin, 0, 15, 15); //open quickly (to 10 degrees)
-    moveServo(thisServo, servopin, 15, 0, 15); //close quickly (to 10 degrees)
+    moveServo(thisServo, 0, 15, 15); //open quickly (to 10 degrees)
+    moveServo(thisServo, 15, 0, 15); //close quickly (to 10 degrees)
   }
 }
 
@@ -80,7 +83,6 @@ void Action::actuateLidLED (char letter) {
       //do nothing
       break;
   }
-  reset();
 }
 
 //A= on B= delayed on C= off D= flicker
@@ -125,8 +127,6 @@ void Action::actuateRedLED (char letter) {
       break;
   }
 
-  reset();
-
 }
 
 //actuateLid:  A= normal B= fast C= slow D= shake
@@ -136,22 +136,22 @@ void Action::actuateLid (char letter) {
     //NORMAL
     case 'A':
     case 'a':
-      moveServo(servoLid, pin_servoLid, 0, lidMax, normal);
+      moveServo(servoLid, 0, 100, normal);
       break;
     //FAST
     case 'B':
     case 'b':
-      moveServo(servoLid, pin_servoLid, 0, lidMax, fast);
+      moveServo(servoLid, 0, 100, fast);
       break;
     //SLOW
     case 'C':
     case 'c':
-      moveServo(servoLid, pin_servoLid, 0, lidMax, slow);
+      moveServo(servoLid, 0, 100, slow);
       break;
     //SHAKE
     case 'D':
     case 'd':
-      shakeServo(servoLid, pin_servoLid);
+      shakeServo(servoLid);
       break;
 
     default:
@@ -159,7 +159,6 @@ void Action::actuateLid (char letter) {
       break;
   }
 
-  //wrapup
 }
 //actuateLid:  A= normal B= fast C= slow D= shake
 void Action::actuateArm (char letter) {
@@ -168,22 +167,28 @@ void Action::actuateArm (char letter) {
     //NORMAL
     case 'A':
     case 'a':
-      moveServo(servoArm, pin_servoArm, 0, armMax, normal);
+      moveServo(servoArm, 119, 0, normal);
+      delay(750);
+      moveServo(servoArm, 0, 119, normal);
       break;
     //FAST
     case 'B':
     case 'b':
-      moveServo(servoArm, pin_servoArm, 0, armMax, fast);
+      moveServo(servoArm, 119, 0, fast);
+      delay(750);
+      moveServo(servoArm, 0, 119, fast);
       break;
       //SLOW
     case 'C':
     case 'c':
-      moveServo(servoArm, pin_servoArm, 0, armMax, slow);
+      moveServo(servoArm, 119, 0, slow);
+      delay(750);
+      moveServo(servoArm, 0, 119, slow);
       break;
     //SHAKE
     case 'D':
     case 'd':
-      shakeServo(servoArm, pin_servoArm);
+      shakeServo(servoArm);
       break;
 
     default:
@@ -191,7 +196,6 @@ void Action::actuateArm (char letter) {
       break;
   }
 
-  //wrapup
 }
 //actuateGooseSound: A: sound B: NO sound
 void Action::actuateGooseSound(char letter) {
@@ -199,12 +203,16 @@ void Action::actuateGooseSound(char letter) {
   {
     case 'A':
     case 'a':
-
+      //on
+      digitalWrite(pin_goosesound, LOW);
+      delay(100);
+      digitalWrite(pin_goosesound, HIGH);
       break;
 
     case 'B':
     case 'b':
-
+      //off
+      //do nothing
       break;
 
     default:
@@ -212,14 +220,13 @@ void Action::actuateGooseSound(char letter) {
       break;
   }
 
-  //wrapup
 }
 
 //------HELPER FUNCTIONS
 //Close box lid
 void Action::closeLid(){
-  servoArm.attach(pin_servoLid);
   servoLid.write(0);  //set servo angle to 0/close lid
+  delay(500);
 }
 
 //reset lights arm and lid
@@ -228,8 +235,8 @@ void Action::reset(){
   digitalWrite(pin_redLight, HIGH);
   digitalWrite(pin_goosesound, HIGH);
 
-  servoArm.attach(pin_servoArm);
-  servoArm.write(armMax);
+  servoArm.write(119);
+  delay(500);
 
   closeLid();
 }

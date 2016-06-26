@@ -10,7 +10,6 @@
 enum TYPE { PRESET = 0, CUSTOM, INVALID };
 #define MODULES  4
 
-
 //pin mapping
 #define pin_switch 7
 #define pin_servoLid 9
@@ -18,12 +17,10 @@ enum TYPE { PRESET = 0, CUSTOM, INVALID };
 #define pin_lidLight 2
 #define pin_redLight 4
 #define pin_goosesound 8
+
 //Speeds for opening lid
 #define fast 10
 #define slow 1
 #define normal 2
-//Max angle for servo motors
-#define lidMax 100
-#define armMax 119
 
 #endif

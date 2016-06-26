@@ -39,31 +39,37 @@ actuateGooseSound
 
 class Action {
   private:
-    //no  functions, I need all of it for preset stuff
+    Servo servoLid, servoArm;
+    int lid_pos;
+    int arm_pos;
+
   public:
-  //Define static action functions here
+    Action(); //constructor
 
   ///HELPER FUNCTIONS
     //Move: servo moves from start angle to end angle
-    static void moveServo (Servo thisServo, int servopin, int startAngle, int endAngle, int angSpeed);
+    void moveServo (Servo thisServo, int startAngle, int endAngle, int angSpeed);
+
     //Shake: Change angle direction very quickly for lid open
-    static void shakeServo(Servo thisServo, int servopin);
-    //Lid Movement functions (normal, fast, slow, shake)
+    void shakeServo(Servo thisServo);
 
     //close box lid from any position
-    static void closeLid();
+    void closeLid();
 
     //turns off lights, makes sure arm is closed, closes lid
-    static void reset();
+    void reset();
 
   //5 MAIN ACTION FUNCTIONS
-    static void actuateLid(char letter);
-    static void actuateLidLED(char letter);
-    static void actuateArm(char letter);
-    static void actuateRedLED(char letter);
-    static void actuateGooseSound (char letter);
+    void actuateLid(char letter);
+    void actuateLidLED(char letter);
+    void actuateArm(char letter);
+    void actuateRedLED(char letter);
+    void actuateGooseSound (char letter);
 
   //PRESET FUNCTIONS
+    void preset0();
+    void preset1();
+    void preset2();
 };
 
 #endif

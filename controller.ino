@@ -17,7 +17,8 @@ IntervalTimer threadTimer;
 String customArray[6];
 int customArrayNumItems = 0;
 int presetArrayNumItems = 0;
-int pos; // variable to store the servo position
+
+Action theAction; //action class
 
 //-------------------------------
 // MULTITHREADING INTERVALTIMER
@@ -84,19 +85,20 @@ void runCustomSequence() {
     letter = charArray[i];
     switch (i){
       case 0:
-        Action::actuateLid(letter);
+        theAction.actuateLid(letter);
         break;
       case 1:
-        Action::actuateLidLED(letter);
+        theAction.actuateLidLED(letter);
         break;
       case 2:
-        Action::actuateRedLED(letter);
+        theAction.actuateRedLED(letter);
         break;
       case 3:
-        Action::actuateArm(letter);
+        theAction.actuateArm(letter);
         break;
     }
   }
+  theAction.reset(); //reset all lids and lid positions
 }
 
 void runPresetSequence() {
@@ -117,12 +119,6 @@ void runPresetSequence() {
       break;
     case 2:
       //ToDo: run preset function 2
-      break;
-    case 3:
-      //ToDo: run preset function 3
-      break;
-    case 4:
-      //ToDo: run preset function 4
       break;
   }
 }
