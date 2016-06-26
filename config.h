@@ -7,9 +7,12 @@
 enum TYPE { PRESET = 0, CUSTOM, INVALID };
 #define MODULES  4
 
+//Objects
+//Servo servoLid, servoArm;
+
 //pin mapping
 #define pin_switch 7
-#define pin_servoLid1 9
+#define pin_servoLid 9
 #define pin_servoArm 10
 #define pin_lidLight 2
 #define pin_redLight 4

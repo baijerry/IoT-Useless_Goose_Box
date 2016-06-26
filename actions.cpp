@@ -1,9 +1,10 @@
 #include "actions.h"
 
 //Move: servo moves from start angle to end angle
-void Action::moveServo (Servo thisServo, int startAngle, int endAngle, int angSpeed) {
+void Action::moveServo (Servo thisServo, int servopin, int startAngle, int endAngle, int angSpeed) {
   bool angleIncr; // boolean to determine if the angle needs to increase or decrease to get to endAngle
   int pos;
+  thisServo.attach(servopin);
   if(startAngle < endAngle) angleIncr = true; //if start angle is smaller than end angle then it must increase
 
   //Increasing servo angle
@@ -24,10 +25,10 @@ void Action::moveServo (Servo thisServo, int startAngle, int endAngle, int angSp
 }
 
 //Shake: Change angle direction very quickly for lid open
-void Action::shakeServo (Servo thisServo) {
+void Action::shakeServo (Servo thisServo, int servopin) {
   for (int i = 0; i < 4; i++) {//oscillate upen and down for 4 cycles
-    moveServo(thisServo, 0, 10, 10); //open quickly (to 10 degrees)
-    moveServo(thisServo, 10, 0, 10); //close quickly (to 10 degrees)
+    moveServo(thisServo, servopin, 0, 10, 10); //open quickly (to 10 degrees)
+    moveServo(thisServo, servopin, 10, 0, 10); //close quickly (to 10 degrees)
   }
 }
 
