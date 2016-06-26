@@ -22,3 +22,19 @@ void Action::moveServo (Servo thisServo, int startAngle, int endAngle, int angSp
     }
   }
 }
+
+void Action::actuateLid (char letter) {
+
+}
+
+void Action::actuateLidLED (char letter) {
+
+}
+
+void Action::actuateArm (char letter) {
+
+}
+
+void Action::actuateRedLED (char letter) {
+
+}

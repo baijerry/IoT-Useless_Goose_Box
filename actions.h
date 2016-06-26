@@ -19,11 +19,11 @@ class Action {
     //Lid Movement functions (normal, fast, slow, shake)
     static void actuateLid(char letter);
     //ToDo: Lid LED functions (on, delayed on, off, flicker)
-    static void actuateLidLED();
+    static void actuateLidLED(char letter);
     //ToDo: Arm Movement (normal, fast, slow, shake)
-    static void actuateArm();
+    static void actuateArm(char letter);
     //ToDo: Goose Red LED functions (on, delayed on, off, flicker)
-    static void actuateRedLED();
+    static void actuateRedLED(char letter);
     //ToDo: Define preset functions
 
 };

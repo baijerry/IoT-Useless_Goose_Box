@@ -4,7 +4,7 @@
 #include "SparkIntervalTimer.h"
 #include <string.h>
 
-
+# define MODULES  4
 //-------------------------------
 // VARIABLES
 //-------------------------------
@@ -15,6 +15,7 @@ String customArray[6];
 int customArrayNumItems;
 Servo servoLid1, servoLid2, servoArm;
 int pos; // variable to store the servo position
+
 
 
 
@@ -33,9 +34,8 @@ void setup() {
   Particle.function("jsonParser", jsonParser);
   Serial.begin(9600);
 
-  //Attach lid servos to pin 9
+  //Attach lid servo to pin 9
   servoLid1.attach(9);
-  servoLid2.attach(9);
   //Attach arm servo to pin 10
   servoArm.attach(10);
 }
@@ -65,23 +65,27 @@ void runCustomSequence() {
   //for each character in that element, run the approproate Action static class function, keep multithreading in mind
 
   //generate random index number between 0 and size of customArray
-  int rando = random(0, customArray.size();
+  int rando = random(0, customArrayNumItems);
   int index = 0;
+  const char * charArray = customArray[rando].c_str();
+  char letter;
+
   //parse through characters of string in random index
-  for(std::string::iterator it = customArray[rando].begin(); it != customArray[rando].end(); it++, index++){  //REV.IEW PARSING**//
+  for(int i = 0; i < MODULES; i++){  //REV.IEW PARSING**//
     //send each character of string to appropriate action function depending on the where the char is in the string
-    switch (index){
+    letter = charArray[i];
+    switch (i){
       case 0:
-      actuateLid(*it);
+      Action::actuateLid(letter);
         break;
       case 1:
-      actuateLidLED(*it);
+      Action::actuateLidLED(letter);
         break;
       case 2:
-      actuateRedLED(*it);
+      Action::actuateRedLED(letter);
         break;
       case 3:
-      actuateArm(*it);
+      Action::actuateArm(letter);
         break;
     }
   }
@@ -119,7 +123,7 @@ int jsonParser(String jsonInput)
   //If type = 0, set typeFlag to 0, return 0.
   //Else, set typeFlag to 1, store data JsonArray in customArray[] dynamically as below, return 1. Else, return -1.
 
-  StaticJsonBuffer<500> jsonBuffer;
+  StaticJsonBuffer<64> jsonBuffer;
   JsonObject& root = jsonBuffer.parseObject(const_cast<char*>(jsonInput.c_str()));
 
   Serial.println(root["type"].as<int>());
