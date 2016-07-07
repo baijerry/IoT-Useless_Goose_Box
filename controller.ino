@@ -68,6 +68,7 @@ void actuateGooseSound (char letter);
 void setup() {
   Particle.function("jsonParser", jsonParser);
   Serial.begin(9600);
+  Serial.println("Connected to serial monitor.");
 
   //pin init
   pinMode(pin_switch, INPUT);
@@ -182,11 +183,10 @@ int jsonParser(String jsonInput)
   //JSON format: {"type":1, "data":["AAAA","ABCA","DCAC","ABCD","DCAC","ACDC"]}
   //If type = 0, set typeFlag to 0, return 0.
   //Else, set typeFlag to 1, store data JsonArray in customArray[] dynamically as below, return 1. Else, return -1.
+  Serial.printf("Data from Android: %s\n", jsonInput.c_str());
 
-  StaticJsonBuffer<64> jsonBuffer;
+  StaticJsonBuffer<500> jsonBuffer;
   JsonObject& root = jsonBuffer.parseObject(const_cast<char*>(jsonInput.c_str()));
-
-  Serial.println(root["type"].as<int>());
 
   if (!root.success())
   {
@@ -196,11 +196,13 @@ int jsonParser(String jsonInput)
 
   if (root["type"] == 0)
   {
+    Serial.println("The type requested is 'preset' - 0.");
     typeFlag = PRESET;
     return 0;
   }
   else if (root["type"] == 1)
   {
+    Serial.println("The type requested is 'custom' - 1.");
     typeFlag = CUSTOM;
     JsonArray& dataArray = root["data"].asArray();
     customArrayNumItems = dataArray.size();
@@ -210,8 +212,7 @@ int jsonParser(String jsonInput)
       customArray[i] = dataArray[i];
 
       //for testing purposes
-      Serial.println("Successfully stored rows from cloud input:");
-      Serial.println(customArray[i]);
+      Serial.printf("Successfully stored rows from cloud input: %s\n", customArray[i].c_str());
     }
 
     return 1;
