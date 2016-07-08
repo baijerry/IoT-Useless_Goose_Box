@@ -34,7 +34,11 @@ actuateArm
 actuateGooseSound
  A= On
  B= Off
+
+Note that any modules connected to a relay (i.e. lidLed, redLed, and gooseSound) are all active low.
+
  */
+
 
 //-------------------------------
 // VARIABLES
@@ -90,12 +94,12 @@ void setup() {
   servoLid.write(0);
   delay(500);
 
-  customArray[0] = "DADB";
+  /*customArray[0] = "DADB";
   customArray[1] = "BDAD";
   customArray[2] = "CCCB";
   customArray[3] = "ABBB";
   customArray[4] = "AACA";
-  customArray[5] = "CBDC";
+  customArray[5] = "CBDC";*/
 }
 
 //-------------------------------
@@ -135,7 +139,7 @@ void runCustomSequence() {
   Serial.println(rando);
 
   //parse through characters of string in random index
-  for(int i = 0; i < MODULES; i++){  //REV.IEW PARSING**//
+  for(int i = 0; i < MODULES; i++){
     //send each character of string to appropriate action function depending on the where the char is in the string
     letter = charArray[i];
     switch (i){
@@ -150,6 +154,9 @@ void runCustomSequence() {
         break;
       case 3:
         actuateArm(letter);
+        break;
+      case 4:
+        actuateGooseSound(letter);
         break;
     }
   }
@@ -276,25 +283,21 @@ void m_reset(){
 void actuateLidLED (char letter) {
   switch (letter)
   {
-    //OFF
+    //ON
     case 'A':
-    case 'a':
       digitalWrite(pin_lidLight, LOW);
       break;
     //DELAYED ON
     case 'B':
-    case 'b':
       delay(delayed_response_timems);
       digitalWrite(pin_lidLight, LOW);
       break;
-    //ON
+    //OFF
     case 'C':
-    case 'c':
       digitalWrite(pin_lidLight, HIGH);
       break;
     //FLICKER
     case 'D':
-    case 'd':
       for (int i = 0; i < 3; i++)
       {
         digitalWrite(pin_lidLight, LOW);
@@ -317,26 +320,21 @@ void actuateLidLED (char letter) {
 void actuateRedLED (char letter) {
   switch (letter)
   {
+    //ON
     case 'A':
-    case 'a':
-      //on
       digitalWrite(pin_redLight, LOW);
       break;
-
+    //DELAYED ON
     case 'B':
-    case 'b':
-      //delayed on
       delay(delayed_response_timems);
       digitalWrite(pin_redLight, LOW);
       break;
-
+    //OFF
     case 'C':
-    case 'c':
-      digitalWrite(pin_redLight, LOW);
+      digitalWrite(pin_redLight, HIGH);
       break;
-
+    //FLICKER
     case 'D':
-    case 'd':
       for (int i = 0; i < 3; i++)
       {
         digitalWrite(pin_redLight, LOW);
@@ -361,22 +359,18 @@ void actuateLid (char letter) {
   {
     //NORMAL
     case 'A':
-    case 'a':
       moveServo(servoLid, 0, 100, normal);
       break;
     //FAST
     case 'B':
-    case 'b':
       moveServo(servoLid, 0, 100, fast);
       break;
     //SLOW
     case 'C':
-    case 'c':
       moveServo(servoLid, 0, 100, slow);
       break;
     //SHAKE
     case 'D':
-    case 'd':
       shakeServo(servoLid);
       break;
 
@@ -391,28 +385,24 @@ void actuateArm (char letter) {
   {
     //NORMAL
     case 'A':
-    case 'a':
       moveServo(servoArm, 119, 0, normal);
       delay(750);
       moveServo(servoArm, 0, 119, normal);
       break;
     //FAST
     case 'B':
-    case 'b':
       moveServo(servoArm, 119, 0, fast);
       delay(750);
       moveServo(servoArm, 0, 119, fast);
       break;
       //SLOW
     case 'C':
-    case 'c':
       moveServo(servoArm, 119, 0, slow);
       delay(750);
       moveServo(servoArm, 0, 119, slow);
       break;
     //SHAKE
     case 'D':
-    case 'd':
       shakeServo(servoArm);
       delay(500);
       moveServo(servoLid, 0, 100, normal);
@@ -427,17 +417,14 @@ void actuateArm (char letter) {
 void actuateGooseSound(char letter) {
   switch (letter)
   {
+    //ON
     case 'A':
-    case 'a':
-      //on
       digitalWrite(pin_goosesound, LOW);
       delay(100);
       digitalWrite(pin_goosesound, HIGH);
       break;
-
+    //OFF
     case 'B':
-    case 'b':
-      //off
       //do nothing
       break;
 

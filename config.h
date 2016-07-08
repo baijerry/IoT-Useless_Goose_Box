@@ -8,7 +8,7 @@
 
 //State/Flags
 enum TYPE { PRESET = 0, CUSTOM, INVALID };
-#define MODULES  4
+#define MODULES  5
 
 //pin mapping
 #define pin_switch D7
