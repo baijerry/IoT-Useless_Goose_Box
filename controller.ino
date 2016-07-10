@@ -8,38 +8,25 @@
 
 /* ACTIONS
 
-actuateLidLED
- A= on
- B= delayed on
- C= off
- D= flicker
+1. actuateLidLED    |  2. actuateRedLED
+ A= on              |   A= on
+ B= delayed on      |   B= delayed on
+ C= off             |   C= off
+ D= flicker         |   D= flicker
 
-actuateRedLED
- A= on
- B= delayed on
- C= off
- D= flicker
+3. actuateLid       |  4. actuateArm
+ A= normal          |   A= normal
+ B= fast            |   B= fast
+ C= slow            |   C= slow
+ D= shake           |   D= shake
 
-actuateLid
- A= normal
- B= fast
- C= slow
- D= shake
-
-actuateArm
- A= normal
- B= fast
- C= slow
- D= shake
-
-actuateGooseSound
+5. actuateGooseSound
  A= On
  B= Off
 
 Note that any modules connected to a relay (i.e. lidLed, redLed, and gooseSound) are all active low.
 
  */
-
 
 //-------------------------------
 // VARIABLES
@@ -58,7 +45,6 @@ int presetArrayNumItems = 0;
 
 // forward declare
 void moveServo (Servo thisServo, int startAngle, int endAngle, int angSpeed);
-void shakeServo(Servo thisServo);
 void closeLid();
 void m_reset();
 void actuateLid(char letter);
@@ -66,12 +52,15 @@ void actuateLidLED(char letter);
 void actuateArm(char letter);
 void actuateRedLED(char letter);
 void actuateGooseSound (char letter);
+void runCustomSequence(char act1, char act2, char act3, char act4, char act5);
+void runPresetSequence(int num);
 
 //-------------------------------
 // SETUP
 //-------------------------------
 void setup() {
   Particle.function("jsonParser", jsonParser);
+  Particle.function("tester", testing);
   Serial.begin(9600);
   Serial.println("Connected to serial monitor.");
 
@@ -95,12 +84,16 @@ void setup() {
   servoLid.write(0);
   delay(500);
 
-  /*customArray[0] = "DADB";
-  customArray[1] = "BDAD";
-  customArray[2] = "CCCB";
-  customArray[3] = "ABBB";
-  customArray[4] = "AACA";
-  customArray[5] = "CBDC";*/
+  //toggle
+  #define DEFAULTCUSTOM
+    #ifdef DEFAULTCUSTOM
+    customArray[0] = "DADB";
+    customArray[1] = "BDAD";
+    customArray[2] = "CCCB";
+    customArray[3] = "ABBB";
+    customArray[4] = "AACA";
+    customArray[5] = "CBDC";
+    #endif
 }
 
 //-------------------------------
@@ -111,68 +104,65 @@ void loop() {
   {
     Serial.println ("switch is on");
     if (1){
-      digitalWrite(pin_goosesound, LOW);
-      delay(500);
-      digitalWrite(pin_goosesound, HIGH);
-      runCustomSequence();
+      //generate random index number between 0 and size of customArray
+      int rando = random(0, customArrayNumItems);
+      const char *charArray = customArray[rando].c_str(); //convert string in customArray to an array of chars
+      char act1 = charArray[0];
+      char act2 = charArray[1];
+      char act3 = charArray[2];
+      char act4 = charArray[3];
+      char act5 = charArray[4];
+
+      Serial.print("Running Custom Sequence: ");
+      Serial.println(rando);
+
+      runCustomSequence(act1, act2, act3, act4, act5);
     }
     else //preset or invalid
     {
-      runPresetSequence();
+      //randomize a number between 0 and number of preset functions
+      int rando = random(0, presetArrayNumItems); //random number generator between 0 and size of customArray
+      Serial.print("Running Preset Sequence: ");
+      Serial.println(rando);
+
+      runPresetSequence(rando);
     }
   }
 }
 
 //-------------------------------
-// HELPER FUNCTIONS
+// ACTION FUNCTIONS
 //-------------------------------
-void runCustomSequence() {
-  //pick an array element from customArray[] at random
-  //for each character in that element, run the approproate Action static class function, keep multithreading in mind
+void runCustomSequence(char act1, char act2, char act3, char act4, char act5) {
 
-  //generate random index number between 0 and size of customArray
-  int rando = random(0, customArrayNumItems);
-  int index = 0;
-  const char * charArray = customArray[rando].c_str(); //convert string in customArray to an array of chars
-  char letter;
+  //Schedule order of actions
+  bool lidledDELAY = false;
+  bool lidledFLICKER = false;
+  bool redledDELAY = false;
+  bool redledFLICKER = false;
+  if (act1 == 'B') lidledDELAY = true;
+  if (act2 == 'B') redledDELAY = true;
+  if (act2 == 'D') redledFLICKER = true;
 
-  Serial.print("Running Custom Sequence: ");
-  Serial.println(rando);
+  //1______
+  actuateGooseSound(act5);
+  if (!lidledDELAY) digitalWrite(pin_lidLight, LOW);
+  if (!redledDELAY) digitalWrite(pin_redLight, LOW);
 
-  //parse through characters of string in random index
-  for(int i = 0; i < MODULES; i++){
-    //send each character of string to appropriate action function depending on the where the char is in the string
-    letter = charArray[i];
-    switch (i){
-      case 0:
-        actuateLid(letter);
-        break;
-      case 1:
-        actuateLidLED(letter);
-        break;
-      case 2:
-        actuateRedLED(letter);
-        break;
-      case 3:
-        actuateArm(letter);
-        break;
-      case 4:
-        actuateGooseSound(letter);
-        break;
-    }
-  }
+  actuateLid(act3);
+
+  //2______
+  if (lidledDELAY) actuateLidLED(act1);
+  if (redledDELAY) actuateRedLED(act2);
+  actuateArm(act4);
+  if (redledFLICKER) actuateRedLED(act2);
+
+  //3______
     m_reset(); //reset all lids and lid positions
 }
 
-void runPresetSequence() {
-  //randomize a number between 0 and number of preset functions (5)
-  //based on randomized number, run appropriate Action static class function (pertaining to presets)
-
-  int rando = random(0, presetArrayNumItems); //random number generator between 0 and size of customArray
-  Serial.print("Running Preset Sequence: ");
-  Serial.println(rando);
-
-  switch (rando)
+void runPresetSequence(int num) {
+  switch (num)
   {
     case 0:
       //ToDo: run preset function 0
@@ -233,49 +223,9 @@ int jsonParser(String jsonInput)
   }
 }
 
-void moveServo (Servo thisServo, int startAngle, int endAngle, int angSpeed) {
-  bool angleIncr = false; // boolean to determine if the angle needs to increase or decrease to get to endAngle
-  int pos = 0;
-  if(startAngle < endAngle) angleIncr = true; //if start angle is smaller than end angle then it must increase
+int testing (String in)
+{
 
-  //Increasing servo angle
-  if(angleIncr){
-    for (pos = startAngle; pos <= endAngle; pos += angSpeed) { // goes from start angle to end angle in steps of angular speed variable
-      thisServo.write(pos);           // tell servo to go to position in variable 'pos'
-      delay(15);                      // waits 15ms for the servo to reach the position
-    }
-  }
-  //Decreasing servo Angle
-  else{
-    for(pos = startAngle; pos >= endAngle; pos -= angSpeed) { // goes from end angle to start angle in steps of angular speed variable
-      thisServo.write(pos);              // tell servo to go to position in variable 'pos'
-      delay(15);                       // waits 15ms for the servo to reach the position
-    }
-  }
-}
-
-void shakeServo (Servo thisServo) {
-  closeLid();//close lid before shaking
-  for (int i = 0; i < 10; i++) {//oscillate up and down for 10 cycles
-    moveServo(thisServo, 0, 15, 15); //open quickly (to 10 degrees)
-    moveServo(thisServo, 15, 0, 15); //close quickly (to 10 degrees)
-  }
-}
-
-void closeLid(){
-  servoLid.write(0);  //set servo angle to 0/close lid
-  delay(500);
-}
-
-void m_reset(){
-  digitalWrite(pin_lidLight, HIGH);
-  digitalWrite(pin_redLight, HIGH);
-  digitalWrite(pin_goosesound, HIGH);
-
-  servoArm.write(119);
-  delay(500);
-
-  closeLid();
 }
 
 //-------------------------------
@@ -299,19 +249,21 @@ void actuateLidLED (char letter) {
       break;
     //FLICKER
     case 'D':
-      for (int i = 0; i < 3; i++)
+    {
+      int array[30] = {100,5, 100,5, 60,5, 40,5, 10,5,
+                     5,5, 10,5, 5,5, 300,10, 10,10,
+                     40,5, 10,30, 40,20, 100,10, 50,5};
+
+      for (int i = 0; i < 15; i=i+2)
       {
         digitalWrite(pin_lidLight, LOW);
-        delay(500);
+        delay(array[i]*10);
         digitalWrite(pin_lidLight, HIGH);
-        delay(300);
-        digitalWrite(pin_lidLight, LOW);
-        delay(100);
-        digitalWrite(pin_lidLight, HIGH);
-        delay(500);
+        delay(array[i+1]*10);
       }
+      digitalWrite(pin_lidLight, LOW);
       break;
-
+    }
     default:
       //do nothing
       break;
@@ -336,19 +288,20 @@ void actuateRedLED (char letter) {
       break;
     //FLICKER
     case 'D':
-      for (int i = 0; i < 3; i++)
+    {
+    int array[20] = {100, 50, 90, 50, 80, 50, 70, 50, 60, 30,
+                 20, 20, 20, 20, 20, 15, 15, 15, 15, 15 };
+
+      for (int i = 0; i < 10; i=i+2)
       {
         digitalWrite(pin_redLight, LOW);
-        delay(500);
+        delay(array[i]*10);
         digitalWrite(pin_redLight, HIGH);
-        delay(300);
-        digitalWrite(pin_redLight, LOW);
-        delay(100);
-        digitalWrite(pin_redLight, HIGH);
-        delay(500);
+        delay(array[i+1]);
       }
+      digitalWrite(pin_redLight, LOW);
       break;
-
+    }
     default:
       //do nothing
       break;
@@ -372,7 +325,14 @@ void actuateLid (char letter) {
       break;
     //SHAKE
     case 'D':
-      shakeServo(servoLid);
+      closeLid(); //make sure lid closed before shaking
+      for (int i = 0; i < 10; i++) {//oscillate up and down for 10 cycles
+        moveServo(servoLid, 0, 15, 15); //open quickly (to 10 degrees)
+        moveServo(servoLid, 15, 0, 15); //close quickly (to 10 degrees)
+      }
+      moveServo(servoLid, 0, 50, slow);
+      delay(500);
+      moveServo(servoLid, 0, 100, slow);
       break;
 
     default:
@@ -387,26 +347,25 @@ void actuateArm (char letter) {
     //NORMAL
     case 'A':
       moveServo(servoArm, 119, 0, normal);
-      delay(750);
-      moveServo(servoArm, 0, 119, normal);
       break;
     //FAST
     case 'B':
       moveServo(servoArm, 119, 0, fast);
-      delay(750);
-      moveServo(servoArm, 0, 119, fast);
       break;
       //SLOW
     case 'C':
       moveServo(servoArm, 119, 0, slow);
-      delay(750);
-      moveServo(servoArm, 0, 119, slow);
       break;
     //SHAKE
     case 'D':
-      shakeServo(servoArm);
+      servoLid.write(100); //make sure lid is open before shaking
       delay(500);
-      moveServo(servoLid, 0, 100, normal);
+      for (int i = 0; i < 2; i++) { //jiggle 2 cycles
+        moveServo(servoArm, 0, 90, 15); //open quickly (to 10 degrees)
+        moveServo(servoArm, 90, 0, 15); //close quickly (to 10 degrees)
+      }
+      delay(500);
+      moveServo(servoArm, 119, 0, normal);
       break;
 
     default:
@@ -433,4 +392,45 @@ void actuateGooseSound(char letter) {
       //do nothing
       break;
   }
+}
+
+//-------------------------------
+// HELPER FUNCTIONS
+//-------------------------------
+
+void moveServo (Servo thisServo, int startAngle, int endAngle, int angSpeed) {
+  bool angleIncr = false; // boolean to determine if the angle needs to increase or decrease to get to endAngle
+  int pos = 0;
+  if(startAngle < endAngle) angleIncr = true; //if start angle is smaller than end angle then it must increase
+
+  //Increasing servo angle
+  if(angleIncr){
+    for (pos = startAngle; pos <= endAngle; pos += angSpeed) { // goes from start angle to end angle in steps of angular speed variable
+      thisServo.write(pos);           // tell servo to go to position in variable 'pos'
+      delay(15);                      // waits 15ms for the servo to reach the position
+    }
+  }
+  //Decreasing servo Angle
+  else{
+    for(pos = startAngle; pos >= endAngle; pos -= angSpeed) { // goes from end angle to start angle in steps of angular speed variable
+      thisServo.write(pos);              // tell servo to go to position in variable 'pos'
+      delay(15);                       // waits 15ms for the servo to reach the position
+    }
+  }
+}
+
+void closeLid(){
+  servoLid.write(0);  //set servo angle to 0/close lid
+  delay(500);
+}
+
+void m_reset(){
+  digitalWrite(pin_lidLight, HIGH);
+  digitalWrite(pin_redLight, HIGH);
+  digitalWrite(pin_goosesound, HIGH);
+
+  servoArm.write(119);
+  delay(500);
+
+  closeLid();
 }
