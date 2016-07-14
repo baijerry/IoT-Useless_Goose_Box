@@ -39,9 +39,8 @@ int arm_pos;
 
 //arrays
 String customArray[6];
-
 int customArrayNumItems = 6;
-int presetArrayNumItems = 0;
+int presetArrayNumItems = 4;
 
 // forward declare
 void moveServo (Servo thisServo, int startAngle, int endAngle, int angSpeed);
@@ -54,13 +53,19 @@ void actuateRedLED(char letter);
 void actuateGooseSound (char letter);
 void runCustomSequence(char act1, char act2, char act3, char act4, char act5);
 void runPresetSequence(int num);
+void preset1();
+void preset2();
+void preset3();
+void preset4();
 
 //-------------------------------
 // SETUP
 //-------------------------------
 void setup() {
   Particle.function("jsonParser", jsonParser);
-  Particle.function("tester", testing);
+  Particle.function("pre-test", preset_testing);
+  Particle.function("toggleType", toggleType);
+
   Serial.begin(9600);
   Serial.println("Connected to serial monitor.");
 
@@ -75,35 +80,51 @@ void setup() {
   digitalWrite(pin_redLight, HIGH);
   digitalWrite(pin_goosesound, HIGH);
 
-
   servoLid.attach(pin_servoLid);
   servoArm.attach(pin_servoArm);
 
-  servoArm.write(119);
+  servoArm.write(120);
   delay(500);
   servoLid.write(0);
   delay(500);
 
+  typeFlag = PRESET;
+
   //toggle
   #define DEFAULTCUSTOM
     #ifdef DEFAULTCUSTOM
-    customArray[0] = "DADB";
-    customArray[1] = "BDAD";
-    customArray[2] = "CCCB";
-    customArray[3] = "ABBB";
-    customArray[4] = "AACA";
-    customArray[5] = "CBDC";
+    customArray[0] = "DADBA";
+    customArray[1] = "BDADB";
+    customArray[2] = "CCCBA";
+    customArray[3] = "ABBBB";
+    customArray[4] = "AACAA";
+    customArray[5] = "CBDCB";
     #endif
 }
 
 //-------------------------------
 // MAIN LOOP
 //-------------------------------
-void loop() {
+void loop(){
+
+  if (Serial.available())
+  {
+    char in[5];
+    int i = 0;
+    while (Serial.available() > 0  && i <5)
+    {
+      in[i] = Serial.read();
+      Serial.print(in[i]);
+      i++;
+    }
+    Serial.println("");
+    runCustomSequence(in[0], in[1], in[2], in[3], in[4]);
+  }
+
   if (digitalRead(pin_switch) == HIGH)
   {
     Serial.println ("switch is on");
-    if (1){
+    if (typeFlag == CUSTOM){
       //generate random index number between 0 and size of customArray
       int rando = random(0, customArrayNumItems);
       const char *charArray = customArray[rando].c_str(); //convert string in customArray to an array of chars
@@ -123,7 +144,7 @@ void loop() {
       //randomize a number between 0 and number of preset functions
       int rando = random(0, presetArrayNumItems); //random number generator between 0 and size of customArray
       Serial.print("Running Preset Sequence: ");
-      Serial.println(rando);
+      Serial.println(rando+1);
 
       runPresetSequence(rando);
     }
@@ -136,26 +157,60 @@ void loop() {
 void runCustomSequence(char act1, char act2, char act3, char act4, char act5) {
 
   //Schedule order of actions
+  bool run_lidled = false;
+  bool run_redled = false;
+
   bool lidledDELAY = false;
   bool lidledFLICKER = false;
   bool redledDELAY = false;
   bool redledFLICKER = false;
   if (act1 == 'B') lidledDELAY = true;
+  if (act1 == 'D') lidledFLICKER = true;
   if (act2 == 'B') redledDELAY = true;
   if (act2 == 'D') redledFLICKER = true;
 
   //1______
   actuateGooseSound(act5);
-  if (!lidledDELAY) digitalWrite(pin_lidLight, LOW);
-  if (!redledDELAY) digitalWrite(pin_redLight, LOW);
+
+  if (!lidledDELAY)
+  {
+    if (act1 != 'C')
+    {
+      //either on or flicker
+      digitalWrite(pin_lidLight, LOW);
+    }
+  }
+
+  if (!redledDELAY)
+  {
+    if (act2 != 'C' && !redledFLICKER)
+    {
+      //on
+      digitalWrite(pin_redLight, LOW);
+    }
+  }
 
   actuateLid(act3);
 
   //2______
-  if (lidledDELAY) actuateLidLED(act1);
-  if (redledDELAY) actuateRedLED(act2);
+  if (act1 != 'C')
+  {
+    actuateLidLED(act1); //flicker, on, or delayed
+    if (redledDELAY)
+    {
+      actuateRedLED(act2); //delay
+    }
+  }
+
   actuateArm(act4);
-  if (redledFLICKER) actuateRedLED(act2);
+  digitalWrite(pin_lidLight, HIGH);
+  delay(500);
+
+  if (redledFLICKER)
+  {
+    actuateRedLED(act2); //must be flicker
+    digitalWrite(pin_redLight, HIGH);
+  }
 
   //3______
     m_reset(); //reset all lids and lid positions
@@ -165,13 +220,16 @@ void runPresetSequence(int num) {
   switch (num)
   {
     case 0:
-      //ToDo: run preset function 0
+      preset1();
       break;
     case 1:
-      //ToDo: run preset function 1
+      preset2();
       break;
     case 2:
-      //ToDo: run preset function 2
+      preset3();
+      break;
+    case 3:
+      preset4();
       break;
   }
 }
@@ -223,9 +281,147 @@ int jsonParser(String jsonInput)
   }
 }
 
-int testing (String in)
+int preset_testing (String in)
 {
+  int num = atoi(in);
+  runPresetSequence(num-1);
+}
 
+int toggleType(String in)
+{
+  if (typeFlag == PRESET)
+  {
+    typeFlag = CUSTOM;
+    return 1;
+  }
+  else if (typeFlag == CUSTOM)
+  {
+    typeFlag = PRESET;
+    return 0;
+  }
+}
+
+//-------------------------------
+// Preset Action Functions
+//-------------------------------
+
+//only sound, slow open, fast finish
+void preset1()
+{
+  actuateGooseSound('A');
+  delay(5500);
+  for (int pos = 0; pos <= 50; pos += 1) {
+    servoLid.write(pos);
+    delay(50);
+  }
+  digitalWrite(pin_redLight, LOW);
+  delay(1000);
+  moveServo(servoLid, 50, 100, fast);
+  moveServo(servoArm, 120, 0, fast);
+  digitalWrite(pin_redLight, HIGH);
+  delay(350);
+  m_reset();
+}
+
+//fast sequence, then pops up again "im watching you"
+void preset2()
+{
+  digitalWrite(pin_lidLight, LOW);
+  actuateLid('B');
+  actuateArm('B');
+  delay(350);
+  digitalWrite(pin_lidLight, HIGH);
+  m_reset();
+  delay(2000);
+  digitalWrite(pin_redLight, LOW);
+  for (int pos = 0; pos <= 50; pos += 15) {
+    servoLid.write(pos);
+    delay(15);
+  }
+  delay(1000);
+  digitalWrite(pin_redLight, HIGH);
+  for (int pos = 50; pos >= 0; pos -= 1) {
+    servoLid.write(pos);
+    delay(70);
+  }
+}
+
+//fakes you, closes, then quick actual sequence
+void preset3()
+{
+  digitalWrite(pin_lidLight, LOW);
+  actuateLid('A');
+  moveServo(servoArm, 120, 30, 5);
+  delay(1000);
+  for (int pos = 30; pos <= 120; pos += 1) {
+    servoArm.write(pos);
+    delay(30);
+  }
+  for (int pos = 50; pos >= 0; pos -= 1) {
+    servoLid.write(pos);
+    delay(50);
+  }
+  delay(2000);
+  actuateLid('B');
+  actuateArm('B');
+  delay(375);
+  digitalWrite(pin_lidLight, HIGH);
+  m_reset();
+}
+
+//can't close light, gets angry
+void preset4()
+{
+  //arm first
+  digitalWrite(pin_lidLight, LOW);
+  actuateLid('A');
+  moveServo(servoArm, 120, 0, normal);
+    digitalWrite(pin_lidLight, HIGH);
+    delay(500);
+    moveServo(servoArm, 0, 60, normal);
+      digitalWrite(pin_lidLight, LOW);
+      moveServo(servoArm, 60, 80, slow);
+    delay(750);
+
+  //arm second
+  moveServo(servoArm, 80, 10, slow);
+    digitalWrite(pin_lidLight, HIGH);
+    delay(750);
+    moveServo(servoArm, 10, 80, slow);
+      digitalWrite(pin_lidLight, LOW);
+      moveServo(servoArm, 80, 100, slow);
+    delay(1000);
+
+  //during lid close
+  moveServo(servoArm, 100, 10, fast);
+    delay(300);
+    digitalWrite(pin_lidLight, HIGH);
+    delay(1000);
+    moveServo(servoArm, 10, 120, slow);
+  moveServo(servoLid, 100, 50, normal);
+    digitalWrite(pin_lidLight, LOW);
+    moveServo(servoLid, 50, 30, slow);
+    delay(750);
+
+  //angry
+  digitalWrite(pin_redLight, LOW);
+  actuateGooseSound('A');
+  delay(2000);
+  moveServo(servoLid, 70, 100, fast);
+
+  moveServo(servoArm, 120, 0, fast);
+  delay(500);
+    for (int i =0; i < 5; i++)
+    {
+      moveServo(servoArm, 0, 35, fast);
+      delay(200);
+      moveServo(servoArm, 35, 0, fast);
+      delay(200);
+    }
+  delay(500);
+  digitalWrite(pin_lidLight, HIGH);
+  delay(1000);
+  m_reset();
 }
 
 //-------------------------------
@@ -314,25 +510,26 @@ void actuateLid (char letter) {
     //NORMAL
     case 'A':
       moveServo(servoLid, 0, 100, normal);
+      delay(100);
       break;
     //FAST
     case 'B':
       moveServo(servoLid, 0, 100, fast);
+      delay(100);
       break;
     //SLOW
     case 'C':
       moveServo(servoLid, 0, 100, slow);
+      delay(100);
       break;
     //SHAKE
     case 'D':
       closeLid(); //make sure lid closed before shaking
       for (int i = 0; i < 10; i++) {//oscillate up and down for 10 cycles
-        moveServo(servoLid, 0, 15, 15); //open quickly (to 10 degrees)
-        moveServo(servoLid, 15, 0, 15); //close quickly (to 10 degrees)
+        moveServo(servoLid, 0, 30, 15); //open quickly
+        moveServo(servoLid, 30, 0, 15); //close quickly
       }
-      moveServo(servoLid, 0, 50, slow);
-      delay(500);
-      moveServo(servoLid, 0, 100, slow);
+      moveServo(servoLid, 0, 100, normal);
       break;
 
     default:
@@ -346,26 +543,30 @@ void actuateArm (char letter) {
   {
     //NORMAL
     case 'A':
-      moveServo(servoArm, 119, 0, normal);
+      moveServo(servoArm, 120, 0, normal);
       break;
     //FAST
     case 'B':
-      moveServo(servoArm, 119, 0, fast);
+      moveServo(servoArm, 120, 0, fast);
       break;
       //SLOW
     case 'C':
-      moveServo(servoArm, 119, 0, slow);
+      moveServo(servoArm, 120, 0, slow);
       break;
     //SHAKE
     case 'D':
       servoLid.write(100); //make sure lid is open before shaking
       delay(500);
       for (int i = 0; i < 2; i++) { //jiggle 2 cycles
-        moveServo(servoArm, 0, 90, 15); //open quickly (to 10 degrees)
-        moveServo(servoArm, 90, 0, 15); //close quickly (to 10 degrees)
+        //moveServo(servoArm, 120, 90, fast); //open quickly (to 10 degrees)
+        servoArm.write(60);
+        delay(600);
+        //moveServo(servoArm, 90, 120, fast); //close quickly (to 10 degrees)
+        servoArm.write(120);
+        delay(500);
       }
       delay(500);
-      moveServo(servoArm, 119, 0, normal);
+      moveServo(servoArm, 120, 0, normal);
       break;
 
     default:
@@ -382,6 +583,7 @@ void actuateGooseSound(char letter) {
       digitalWrite(pin_goosesound, LOW);
       delay(100);
       digitalWrite(pin_goosesound, HIGH);
+      delay(1500);
       break;
     //OFF
     case 'B':
@@ -404,14 +606,16 @@ void moveServo (Servo thisServo, int startAngle, int endAngle, int angSpeed) {
   if(startAngle < endAngle) angleIncr = true; //if start angle is smaller than end angle then it must increase
 
   //Increasing servo angle
-  if(angleIncr){
+  if(angleIncr)
+  {
     for (pos = startAngle; pos <= endAngle; pos += angSpeed) { // goes from start angle to end angle in steps of angular speed variable
       thisServo.write(pos);           // tell servo to go to position in variable 'pos'
       delay(15);                      // waits 15ms for the servo to reach the position
     }
   }
   //Decreasing servo Angle
-  else{
+  else
+  {
     for(pos = startAngle; pos >= endAngle; pos -= angSpeed) { // goes from end angle to start angle in steps of angular speed variable
       thisServo.write(pos);              // tell servo to go to position in variable 'pos'
       delay(15);                       // waits 15ms for the servo to reach the position
@@ -420,7 +624,7 @@ void moveServo (Servo thisServo, int startAngle, int endAngle, int angSpeed) {
 }
 
 void closeLid(){
-  servoLid.write(0);  //set servo angle to 0/close lid
+  moveServo (servoLid, 100, 0, fast);  //set servo angle to 0/close lid
   delay(500);
 }
 
@@ -429,8 +633,7 @@ void m_reset(){
   digitalWrite(pin_redLight, HIGH);
   digitalWrite(pin_goosesound, HIGH);
 
-  servoArm.write(119);
+  servoArm.write(120);
   delay(500);
-
-  closeLid();
+  servoLid.write(0);
 }
