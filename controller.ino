@@ -64,6 +64,7 @@ void preset4();
 void setup() {
   Particle.function("jsonParser", jsonParser);
   Particle.function("pre-test", preset_testing);
+  Particle.function("cus-test", custom_testing);
   Particle.function("toggleType", toggleType);
 
   Serial.begin(9600);
@@ -83,7 +84,7 @@ void setup() {
   servoLid.attach(pin_servoLid);
   servoArm.attach(pin_servoArm);
 
-  servoArm.write(120);
+  servoArm.write(135);
   delay(500);
   servoLid.write(0);
   delay(500);
@@ -204,7 +205,7 @@ void runCustomSequence(char act1, char act2, char act3, char act4, char act5) {
 
   actuateArm(act4);
   digitalWrite(pin_lidLight, HIGH);
-  delay(500);
+  delay(600);
 
   if (redledFLICKER)
   {
@@ -287,6 +288,14 @@ int preset_testing (String in)
   runPresetSequence(num-1);
 }
 
+int custom_testing (String in)
+{
+  char c_in[6];
+  in.toCharArray(c_in, 6);
+  runCustomSequence(c_in[0], c_in[1], c_in[2], c_in[3], c_in[4]);
+
+}
+
 int toggleType(String in)
 {
   if (typeFlag == PRESET)
@@ -309,6 +318,7 @@ int toggleType(String in)
 void preset1()
 {
   actuateGooseSound('A');
+  digitalWrite(pin_lidLight, LOW);
   delay(5500);
   for (int pos = 0; pos <= 50; pos += 1) {
     servoLid.write(pos);
@@ -317,9 +327,10 @@ void preset1()
   digitalWrite(pin_redLight, LOW);
   delay(1000);
   moveServo(servoLid, 50, 100, fast);
-  moveServo(servoArm, 120, 0, fast);
+  moveServo(servoArm, 135, 0, fast);
+  digitalWrite(pin_lidLight, HIGH);
   digitalWrite(pin_redLight, HIGH);
-  delay(350);
+  delay(500);
   m_reset();
 }
 
@@ -329,7 +340,7 @@ void preset2()
   digitalWrite(pin_lidLight, LOW);
   actuateLid('B');
   actuateArm('B');
-  delay(350);
+  delay(600);
   digitalWrite(pin_lidLight, HIGH);
   m_reset();
   delay(2000);
@@ -351,9 +362,9 @@ void preset3()
 {
   digitalWrite(pin_lidLight, LOW);
   actuateLid('A');
-  moveServo(servoArm, 120, 30, 5);
+  moveServo(servoArm, 135, 30, 5);
   delay(1000);
-  for (int pos = 30; pos <= 120; pos += 1) {
+  for (int pos = 30; pos <= 135; pos += 1) {
     servoArm.write(pos);
     delay(30);
   }
@@ -364,7 +375,7 @@ void preset3()
   delay(2000);
   actuateLid('B');
   actuateArm('B');
-  delay(375);
+  delay(500);
   digitalWrite(pin_lidLight, HIGH);
   m_reset();
 }
@@ -375,7 +386,7 @@ void preset4()
   //arm first
   digitalWrite(pin_lidLight, LOW);
   actuateLid('A');
-  moveServo(servoArm, 120, 0, normal);
+  moveServo(servoArm, 135, 0, normal);
     digitalWrite(pin_lidLight, HIGH);
     delay(500);
     moveServo(servoArm, 0, 60, normal);
@@ -397,7 +408,7 @@ void preset4()
     delay(300);
     digitalWrite(pin_lidLight, HIGH);
     delay(1000);
-    moveServo(servoArm, 10, 120, slow);
+    moveServo(servoArm, 10, 135, slow);
   moveServo(servoLid, 100, 50, normal);
     digitalWrite(pin_lidLight, LOW);
     moveServo(servoLid, 50, 30, slow);
@@ -409,13 +420,13 @@ void preset4()
   delay(2000);
   moveServo(servoLid, 70, 100, fast);
 
-  moveServo(servoArm, 120, 0, fast);
+  moveServo(servoArm, 135, 0, fast);
   delay(500);
     for (int i =0; i < 5; i++)
     {
-      moveServo(servoArm, 0, 35, fast);
+      moveServo(servoArm, 0, 55, fast);
       delay(200);
-      moveServo(servoArm, 35, 0, fast);
+      moveServo(servoArm, 55, 0, fast);
       delay(200);
     }
   delay(500);
@@ -543,30 +554,32 @@ void actuateArm (char letter) {
   {
     //NORMAL
     case 'A':
-      moveServo(servoArm, 120, 0, normal);
+      moveServo(servoArm, 135, 60, normal);
+      moveServo(servoArm, 60, 0, fast);
       break;
     //FAST
     case 'B':
-      moveServo(servoArm, 120, 0, fast);
+      moveServo(servoArm, 135, 0, fast);
       break;
       //SLOW
     case 'C':
-      moveServo(servoArm, 120, 0, slow);
+      moveServo(servoArm, 135, 60, slow);
+      moveServo(servoArm, 60, 0, fast);
       break;
     //SHAKE
     case 'D':
       servoLid.write(100); //make sure lid is open before shaking
       delay(500);
       for (int i = 0; i < 2; i++) { //jiggle 2 cycles
-        //moveServo(servoArm, 120, 90, fast); //open quickly (to 10 degrees)
+        //moveServo(servoArm, 135, 90, fast); //open quickly (to 10 degrees)
         servoArm.write(60);
         delay(600);
-        //moveServo(servoArm, 90, 120, fast); //close quickly (to 10 degrees)
-        servoArm.write(120);
+        //moveServo(servoArm, 90, 135, fast); //close quickly (to 10 degrees)
+        servoArm.write(135);
         delay(500);
       }
       delay(500);
-      moveServo(servoArm, 120, 0, normal);
+      moveServo(servoArm, 135, 0, fast);
       break;
 
     default:
@@ -633,7 +646,7 @@ void m_reset(){
   digitalWrite(pin_redLight, HIGH);
   digitalWrite(pin_goosesound, HIGH);
 
-  servoArm.write(120);
+  servoArm.write(135);
   delay(500);
   servoLid.write(0);
 }
