@@ -298,6 +298,7 @@ int custom_testing (String in)
 
 int toggleType(String in)
 {
+  /*
   if (typeFlag == PRESET)
   {
     typeFlag = CUSTOM;
@@ -308,6 +309,18 @@ int toggleType(String in)
     typeFlag = PRESET;
     return 0;
   }
+  */
+  if (in.equals("PRESET"))
+  {
+    typeFlag = PRESET;
+    return 0;
+  }
+  else if (in.equals("CUSTOM"))
+  {
+    typeFlag = CUSTOM;
+    return 1;
+  }
+
 }
 
 //-------------------------------
