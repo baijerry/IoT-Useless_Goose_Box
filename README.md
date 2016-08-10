@@ -40,3 +40,6 @@ This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> 
 <p>The box's encasing is a rectangular prism shaped wooden box.  The lid of the box was secured with hinges; allowing it to easily rotate open with a sevrvo motor.  A thicker piece of wood was used to cut out the arm that was later covered in pipe cleaners and fastened to a second servo motor.  Both servos were secured to the inside faces of the box.</br></br>
 
 A combination of scrap wood, hot glue, and screws were used to fasten the switch, LED, light bulb, speaker, and hook to hold the goose to the inside of the box.  All parts were cut and drilled to shape using a drill press and band saw.</p>
+
+<h2>Control Program</h2>
+<h2>App</h2>
