@@ -8,10 +8,25 @@ This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> 
 
 #Here Is How We Did It
 <h2>Materials</h2>
+<h4>HARDWARE</h4>
 <ul>
-  <li>wood</li>
-  <li>wood</li>
-  <li>wood</li>
-  <li>wood</li>
-  <li>wood</li>
+  <li>Wood</li>
+  <li>Wood Glue</li>
+  <li>Nails</li>
+  <li>Soldering Iron & Solder</li>
+  </br>
+  <li>Particle Photon</li>
+  <li>Arduino Uno Kit</li>
+  <li>Toggle Switch</li>
+  <li>Relays</li>
+  <li>Speaker (Goose Quacking)</li>
+  <li>2 Servo Motors</li>
+  <li>2 Light bulbs</li>
+  <li>Plushy Goose</li>
+</ul>
+<h4>SOFTWARE</h4>
+<ul>
+  <li>Speaker (Goose Quacking)</li>
+  <li>Android Studio: Java</li>
+  <li>Particle Dev: C++/Arduino/Particle</li>
 </ul>
