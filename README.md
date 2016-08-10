@@ -4,7 +4,7 @@
 
 This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> that uses an intuitive Android app to incorporate user customization.  This not only incorporates awesome IoT functionality, but additionally gives the user the power to remotely define new patterns in which the box can turn itself off; via an array of light bulbs, speakers, and servo motors.</p>
 
-<!-- OPEN BOX IMAGE -->
+<img src="IoT-Useless_Goose_Box/introPicture.jpg"/>
 
 #Here Is How We Did It
 <h2>Materials</h2>
@@ -29,7 +29,6 @@ This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> 
 </ul>
 <h4>SOFTWARE</h4>
 <ul>
-  <li>Speaker (Goose Quacking)</li>
   <li>Android Studio: Java</li>
   <li>Particle Dev: C++/Arduino/Particle</li>
 </ul>
@@ -41,3 +40,6 @@ This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> 
 <p>The box's encasing is a rectangular prism shaped wooden box.  The lid of the box was secured with hinges; allowing it to easily rotate open with a sevrvo motor.  A thicker piece of wood was used to cut out the arm that was later covered in pipe cleaners and fastened to a second servo motor.  Both servos were secured to the inside faces of the box.</br></br>
 
 A combination of scrap wood, hot glue, and screws were used to fasten the switch, LED, light bulb, speaker, and hook to hold the goose to the inside of the box.  All parts were cut and drilled to shape using a drill press and band saw.</p>
+
+<h2>Control Program</h2>
+<h2>App</h2>
