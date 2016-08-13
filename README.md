@@ -4,7 +4,7 @@
 
 This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> that uses an intuitive Android app to incorporate user customization.  This not only incorporates awesome IoT functionality, but additionally gives the user the power to remotely define new patterns in which the box can turn itself off; via an array of light bulbs, speakers, and servo motors.</p>
 
-<img src="IoT-Useless_Goose_Box/introPicture.jpg"/>
+<img src="introPicture.jpg"/>
 
 #Here Is How We Did It
 <h2>Materials</h2>
@@ -13,10 +13,11 @@ This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> 
   <li>Particle Photon</li>
   <li>Arduino Uno Kit</li>
   <li>Toggle Switch</li>
-  <li>Relays</li>
+  <li>3 Relays</li>
   <li>Speaker (Goose Quacking)</li>
   <li>2 Servo Motors</li>
-  <li>2 Light bulbs</li>
+  <li>Mini Light bulb</li>
+  <li>Flashlight</li>
   <li>Plushy Goose</li>
   <li>Wood</li>
   <li>Wood Glue</li>
@@ -25,7 +26,6 @@ This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> 
   <li>Metal Hinges</li>
   <li>Hook</li>
   <li>Cardboard</li>
-  <li>Black Pipecleaners</li>
 </ul>
 <h4>SOFTWARE</h4>
 <ul>
@@ -36,10 +36,15 @@ This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> 
 <!-- BOX  -->
 <h2>Building the Box</h2>
 <!-- NOT SHOWING UP -->
-<img src="IoT-Useless_Goose_Box/boxConstruction.jpg"/>  
+<img src="images/boxConstruction.jpg"/>  
 <p>The box's encasing is a rectangular prism shaped wooden box.  The lid of the box was secured with hinges; allowing it to easily rotate open with a sevrvo motor.  A thicker piece of wood was used to cut out the arm that was later covered in pipe cleaners and fastened to a second servo motor.  Both servos were secured to the inside faces of the box.</br></br>
 
 A combination of scrap wood, hot glue, and screws were used to fasten the switch, LED, light bulb, speaker, and hook to hold the goose to the inside of the box.  All parts were cut and drilled to shape using a drill press and band saw.</p>
 
+<p>ToDo: include the pictures of these components (servos, lights etc)</p>
+
 <h2>Control Program</h2>
+<p>ToDo: How actions are broken down (the letter codes), how this letter string is passed into array, random index picked and run. How we wrote a suite of functions to process codes (see image of workflow) </p>
+
 <h2>App</h2>
+<p>ToDo: Functionalities: add new custom rows, delete custom rows, click row in app to run row remotely, toggle between presets and custom patterns</p>
