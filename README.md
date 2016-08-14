@@ -42,6 +42,7 @@ A combination of scrap wood, hot glue, and screws were used to fasten the switch
 <img src="images/hardwarePic.jpg"/>
 <!-- CONTROL PROGRAM  -->
 <h2>Control Program</h2>
+<img src="images/DSC01584.JPG"/>
 <p>ToDo: How actions are broken down (the letter codes), how this letter string is passed into array, random index picked and run. How we wrote a suite of functions to process codes (see image of workflow) </p>
 <!-- ANDROID APPLICATION  -->
 <h2>App</h2>
