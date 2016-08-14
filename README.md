@@ -4,7 +4,7 @@
 
 This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> that uses an intuitive Android app to incorporate user customization.  This not only incorporates awesome IoT functionality, but additionally gives the user the power to remotely define new patterns in which the box can turn itself off; via an array of light bulbs, speakers, and servo motors.</p>
 
-<img src="introPicture.jpg"/>
+<img src="images/introPicture.jpg"/>
 
 #Here Is How We Did It
 <h2>Materials</h2>
