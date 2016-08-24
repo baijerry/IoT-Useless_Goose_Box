@@ -36,20 +36,20 @@ This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> 
 <!-- BOX  -->
 <h2>Building the Box</h2>
 <img src="images/boxConstruction.jpg"/>  
-<p>The box's encasing is a rectangular prism shaped wooden box.  The lid of the box was secured with hinges; allowing it to easily rotate open with a sevrvo motor.  A thicker piece of wood was used to cut out the arm that was later covered in pipe cleaners and fastened to a second servo motor.  Both servos were secured to the inside faces of the box.</br></br>
+<p>The box's encasing was made from plywood sheets.  The lid of the box was secured with hinges; allowing it to easily rotate open with a sevrvo motor.  A thicker piece of wood was carefully measured out to create the arm, which was fastened to a second servo motor.  Both servos were secured to the inside faces of the box.</br></br>
 
-A combination of scrap wood, hot glue, and screws were used to fasten the switch, LED, light bulb, speaker, and hook to hold the goose to the inside of the box.  All parts were cut and drilled to shape using a drill press and band saw.</p>
+A combination of scrap wood, hot glue, and screws were used to fasten the switch, LED, light bulb, speaker, and hook to hold the goose to the inside of the box.  Tools used included the drill press, band saw, and sanders.</p>
 <img src="images/hardwarePic.jpg"/>
 <!-- CONTROL PROGRAM  -->
 <h2>Control Program</h2>
 <img src="images/DSC01584.JPG"/>
-<p>The control program of the GooseBot was written in such a way that allows the user's box to open in one of two ways: with randomized patterns or patterns designed by the user. 
+<p>The control program of the GooseBot was written in such a way that allows the user's box to open in one of two ways: with preset patterns or patterns designed by the user.
 
 <h4>Main Loop</h4>
-<p>A main loop is continuously run that checks whether or not the switch has been turned on.  When it has, a pattern is randomly chosen from an array of either pre-set or custom patterns and used to open the box.</p>
+<p>A main loop is continuously run that checks whether or not the box's physical switch has been turned on.  When it has, a pattern is randomly chosen from an array of either pre-set or custom patterns and used to open the box. The Android app sends in a flag which toggles between the preset and custom modes.</p>
 
 <h4>Pattern Definition</h4>
-<p>Each pattern is a combination of 5 actions that include the actuation of the mini light bulb, flashlight, servo motors, and goose speaker. Various combinations of these actions make up the patterns the box performs before turning itslef back off. Each action can vary in the way in which it actuates as follows:</p>
+<p>Each custom pattern is a combination of 5 actions that include the actuation of the mini light bulb, flashlight, lid, arm, and goose speaker. Various combinations of these actions make up the patterns the box performs before turning itself off. Each action can vary in the way in which it actuates as follows:</p>
 <h5>Flashlight and Mini Light Bulb</h5>
 <ul>
   <li>On</li>
@@ -69,8 +69,9 @@ A combination of scrap wood, hot glue, and screws were used to fasten the switch
   <li>On</li>
   <li>Off</li>
 </ul>
-<p>Each of the actuation methods corrolates to a <i>char</i> of letter <i>A</i> through <i>D</i>. When a pattern is created the 5 letters are saved as a string and added to an array of custom or pre-set patterns. The <i>main loop</i> then uses this array from which to randomly select a pattern to perform.</p>
-<!--ToDo: How actions are broken down (the letter codes), how this letter string is passed into array, random index picked and run. How we wrote a suite of functions to process codes (see image of workflow) -->
+<p>Each of the actuation methods correlates to a <i>char</i>, from letter <i>A</i> up to <i>D</i>. When a pattern is created the 5 letters are saved as a string and added to an array of custom or pre-set patterns. The <i>main loop</i> then uses this array from which to randomly select a pattern to perform. The letters are parsed into actions in order, following the format:  Mini Light Bulb, Flashlight, Lid, Arm, Goose Sound</p>
+ <!-- TODO: ADD PICTURE OF FLOW  -->
+
 <!-- ANDROID APPLICATION  -->
 <h2>App</h2>
 <!-- ToDo: Functionalities: add new custom rows, delete custom rows, click row in app to run row remotely, toggle between presets and custom patterns-->
