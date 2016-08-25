@@ -20,7 +20,6 @@ This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> 
   <li>Flashlight</li>
   <li>Plushy Goose</li>
   <li>Wood</li>
-  <li>Wood Glue</li>
   <li>Nails</li>
   <li>Soldering Iron & Solder</li>
   <li>Metal Hinges</li>
