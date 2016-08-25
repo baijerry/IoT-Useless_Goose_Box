@@ -40,6 +40,7 @@ This year's <b>2016 EngHack Winner</b>, is a Waterloo themed <i>useless box</i> 
 
 A combination of scrap wood, hot glue, and screws were used to fasten the switch, LED, light bulb, speaker, and hook to hold the goose to the inside of the box.  Tools used included the drill press, band saw, and sanders.</p>
 <img src="images/hardwarePic.jpg"/>
+
 <!-- CONTROL PROGRAM  -->
 <h2>Control Program</h2>
 <img src="images/DSC01584.JPG"/>
@@ -70,8 +71,17 @@ A combination of scrap wood, hot glue, and screws were used to fasten the switch
   <li>Off</li>
 </ul>
 <p>Each of the actuation methods correlates to a <i>char</i>, from letter <i>A</i> up to <i>D</i>. When a pattern is created the 5 letters are saved as a string and added to an array of custom or pre-set patterns. The <i>main loop</i> then uses this array from which to randomly select a pattern to perform. The letters are parsed into actions in order, following the format:  Mini Light Bulb, Flashlight, Lid, Arm, Goose Sound</p>
- <!-- TODO: ADD PICTURE OF FLOW  -->
 
 <!-- ANDROID APPLICATION  -->
 <h2>App</h2>
-<!-- ToDo: Functionalities: add new custom rows, delete custom rows, click row in app to run row remotely, toggle between presets and custom patterns-->
+<p>The companion Android app source code can be found <a href="https://github.com/uzbhutta/Android-IoTUselessGooseBox">here</a>. The app consists of two main pages (fragments) accessible via swiping. </p>
+
+(gif here)
+
+<p>The two fragments above are housed in a FrameLayout in the MainActivity, and are swiped between thanks to a FragmentManager in conjunction with a TabLayout.</p>
+
+<p>The Custom fragment allows users to define their own custom actions for when the GooseBox's switch is turned 'on'. The user can customize all the aspects of the GooseBox by pressing the yellow floating action button. At any time, the user can tap on a custom action they've created in the list, and the GooseBox immediately runs the action. Alternatively, they can press the prompt at the top of the page to randomly cycle through their custom-defined actions on each GooseBox 'on' toggle. </p>
+
+(gif showing adding a new action)
+
+<p>The Preset fragment houses four advanced presets that exist in the GooseBox control program. As in the Custom fragment, the user can tap on an action to see the GooseBox perform it immediately. Alternatively, they can press the prompt at the top of the page to randomly cycle through the preset actions on each GooseBox 'on' toggle.</p>
