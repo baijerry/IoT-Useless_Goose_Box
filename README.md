@@ -75,12 +75,12 @@ A combination of scrap wood, hot glue, and screws were used to fasten the switch
 <h2>App</h2>
 <p>The companion Android app source code can be found <a href="https://github.com/uzbhutta/Android-IoTUselessGooseBox">here</a>. The app consists of two main pages (fragments) accessible via swiping. </p>
 
-<img src="images/screens.gif"/>
+<img src="images/screens.gif" =250x>
 
 <p>The two fragments above are housed in a FrameLayout in the MainActivity, and are swiped between thanks to a FragmentManager in conjunction with a TabLayout.</p>
 
 <p>The Custom fragment allows users to define their own custom actions for when the GooseBox's switch is turned 'on'. The user can customize all the aspects of the GooseBox by pressing the yellow floating action button. At any time, the user can tap on a custom action they've created in the list, and the GooseBox immediately runs the action. Alternatively, they can press the prompt at the top of the page to randomly cycle through their custom-defined actions on each GooseBox 'on' toggle. </p>
 
-<img src="images/settingentry.gif"/>
+<img src="images/settingentry.gif" =250x>
 
 <p>The Preset fragment houses four advanced presets that exist in the GooseBox control program. As in the Custom fragment, the user can tap on an action to see the GooseBox perform it immediately. Alternatively, they can press the prompt at the top of the page to randomly cycle through the preset actions on each GooseBox 'on' toggle.</p>
